@@ -1,0 +1,16 @@
+<!-- 加载失败 · 重试
+     配色沿用「田园晨野」Token：陶红只做点缀（描边 + 图标底），
+     主按钮仍是品牌绿 —— 失败态不该变成一个刺眼的红色告警条。 -->
+<view class="le" wx:if="{{show}}">
+  <view class="le-badge">
+    <view class="ic ic-warn-cream ic-sm"></view>
+  </view>
+
+  <view class="le-body">
+    <text class="le-title">{{title}}</text>
+    <text class="le-msg" wx:if="{{msg}}">{{msg}}</text>
+    <text class="le-hint" wx:if="{{!msg}}">检查网络后重试，或下拉页面刷新</text>
+  </view>
+
+  <view class="le-btn" hover-class="le-btn-hover" bindtap="onRetry">{{btnText}}</view>
+</view>

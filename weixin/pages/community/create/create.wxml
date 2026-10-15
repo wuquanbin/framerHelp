@@ -1,0 +1,127 @@
+<view class="container">
+  <!-- 导语：告知用户"报得越全，响应越快" -->
+  <view class="page-lead">
+    <text class="page-lead-text">信息越完整，专家响应越快</text>
+  </view>
+
+  <!-- 组 1：基本信息（必填） -->
+  <view class="group-card">
+    <view class="group-label">
+      <text class="group-label-text">基本信息</text>
+      <text class="group-label-hint">均为必填</text>
+    </view>
+
+    <view class="field">
+      <view class="form-label">上报类型 <text class="req">*</text></view>
+      <view class="type-picker">
+        <view class="type-option type-pest {{reportType === 'pest' ? 'selected' : ''}}" hover-class="opt-hover" hover-stay-time="60" bindtap="selectType" data-type="pest">
+          <text class="type-icon">🐛</text>
+          <text>病虫害</text>
+        </view>
+        <view class="type-option type-disaster {{reportType === 'disaster' ? 'selected' : ''}}" hover-class="opt-hover" hover-stay-time="60" bindtap="selectType" data-type="disaster">
+          <text class="type-icon">🌊</text>
+          <text>灾损</text>
+        </view>
+        <view class="type-option type-growth {{reportType === 'growth' ? 'selected' : ''}}" hover-class="opt-hover" hover-stay-time="60" bindtap="selectType" data-type="growth">
+          <text class="type-icon">🌱</text>
+          <text>长势</text>
+        </view>
+        <view class="type-option type-help {{reportType === 'help' ? 'selected' : ''}}" hover-class="opt-hover" hover-stay-time="60" bindtap="selectType" data-type="help">
+          <text class="type-icon">🆘</text>
+          <text>求助</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="field">
+      <view class="form-label">标题 <text class="req">*</text></view>
+      <input class="form-input" placeholder="一句话说清问题，例如稻叶出现褐色斑点" placeholder-class="input-placeholder" maxlength="50" value="{{title}}" bindinput="onTitleInput" />
+    </view>
+
+    <view class="field field-last">
+      <view class="form-label-row">
+        <view class="form-label">详细描述 <text class="req">*</text></view>
+        <text class="char-count {{description.length >= 480 ? 'char-warn' : ''}}">{{description.length}}/500</text>
+      </view>
+      <textarea class="form-textarea" placeholder="请描述具体情况，如受灾面积、作物表现等" placeholder-class="input-placeholder" value="{{description}}" bindinput="onDescInput" maxlength="500"></textarea>
+
+      <!-- AI 帮我整理：把农户口语原话整理成规范工单草稿 -->
+      <!-- 只回填表单、不替用户提交，改不改、要不要都由农户自己定 -->
+      <view class="ai-polish">
+        <view class="ai-polish-btn {{parsing ? 'is-busy' : ''}}" hover-class="ai-polish-btn-hover" hover-stay-time="60" bindtap="aiPolish">
+          <text class="ai-polish-icon">{{parsing ? '⏳' : '✨'}}</text>
+          <text class="ai-polish-label">{{parsing ? '整理中' : 'AI 帮我整理'}}</text>
+        </view>
+        <text class="ai-polish-hint">{{polishHint}}</text>
+      </view>
+
+      <!-- 初步处置建议：随整理结果一起返回，仅供参考 -->
+      <view wx:if="{{aiSuggestion}}" class="ai-suggest">
+        <view class="ai-suggest-head">
+          <text class="ai-suggest-tag">AI 初步建议</text>
+          <text class="ai-suggest-fold" bindtap="foldAiSuggestion">收起</text>
+        </view>
+        <text class="ai-suggest-text">{{aiSuggestion}}</text>
+        <text class="ai-suggest-foot">以上为模型参考意见，最终处理以专家复核为准</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 组 2：补充信息（选填） -->
+  <view class="group-card">
+    <view class="group-label">
+      <text class="group-label-text">补充信息</text>
+      <text class="group-label-hint">选填，帮助专家更快定位</text>
+    </view>
+
+    <view class="field">
+      <view class="form-label">现场照片 <text class="label-sub">最多 4 张，已传 {{imageList.length}}</text></view>
+      <view class="image-picker">
+        <view class="image-item" wx:for="{{imageList}}" wx:key="*this">
+          <image src="{{item}}" mode="aspectFill" class="picked-image"></image>
+          <view class="remove-btn" catchtap="removeImage" data-index="{{index}}">×</view>
+        </view>
+        <view class="add-image" hover-class="add-hover" bindtap="chooseImage" wx:if="{{imageList.length < 4}}">
+          <text class="add-icon">📷</text>
+          <text class="add-text">添加</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="field">
+      <view class="form-label">关联作物</view>
+      <picker mode="selector" range="{{cropOptions}}" bindchange="onCropChange">
+        <view class="picker-value {{cropName ? 'picker-selected' : ''}}" hover-class="picker-hover">
+          <text wx:if="{{cropName}}">{{cropName}}</text>
+          <text wx:else class="picker-placeholder">请选择作物</text>
+          <text class="picker-arrow">›</text>
+        </view>
+      </picker>
+    </view>
+
+    <view class="field">
+      <view class="form-label">生长阶段</view>
+      <picker mode="selector" range="{{growthStageOptions}}" value="{{growthStageIndex}}" bindchange="onStageChange">
+        <view class="picker-value {{growthStage ? 'picker-selected' : ''}}" hover-class="picker-hover">
+          <text>{{growthStage}}</text>
+          <text class="picker-arrow">›</text>
+        </view>
+      </picker>
+    </view>
+
+    <view class="field field-last">
+      <view class="form-label">紧急程度</view>
+      <view class="urgency-picker">
+        <view class="urgency-option {{urgency === 'low' ? 'selected-low' : ''}}" hover-class="opt-hover" hover-stay-time="60" bindtap="selectUrgency" data-urgency="low">一般</view>
+        <view class="urgency-option {{urgency === 'medium' ? 'selected-medium' : ''}}" hover-class="opt-hover" hover-stay-time="60" bindtap="selectUrgency" data-urgency="medium">较急</view>
+        <view class="urgency-option {{urgency === 'high' ? 'selected-high' : ''}}" hover-class="opt-hover" hover-stay-time="60" bindtap="selectUrgency" data-urgency="high">紧急</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部固定提交栏 -->
+  <view class="submit-bar">
+    <button class="submit-btn" bindtap="submitReport" loading="{{submitting}}">提交上报</button>
+  </view>
+  <view class="submit-bar-safe"></view>
+</view>

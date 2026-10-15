@@ -1,0 +1,724 @@
+/* 个人中心 · 田园晨野 */
+/* 配色走 app.wxss 的 CSS 变量（--g600/--card/--ink 等），此处只管布局与形态 */
+
+/* ============ 顶部用户区：深绿晨野 ============ */
+.user-header {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(168deg, #1C4231 0%, #27573C 55%, #2F6B42 100%);
+  border-radius: 28rpx;
+  padding: 16rpx 40rpx 44rpx;
+  margin-bottom: 24rpx;
+  box-shadow: 0 6rpx 24rpx rgba(30, 70, 52, 0.28);
+}
+
+/* 远山薄雾装饰层已删除：它在底部 76rpx 处留有硬边界，
+   雾层与底色明暗差形成一块突兀的深绿长方形；现在是干净的纯渐变 */
+
+.user-header-inner {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  z-index: 2;
+}
+
+/* 未登录态垂直居中排列 */
+.user-header-inner.is-anonymous {
+  align-items: center;
+  text-align: center;
+  padding: 36rpx 0 20rpx;
+}
+
+.uh-top {
+  display: flex;
+  align-items: center;
+  gap: 30rpx;
+  margin-top: 8rpx;
+}
+
+.uh-user-info {
+  flex: 1;
+  min-width: 0;
+}
+
+/* ============ 头像 ============ */
+.avatar-wrapper {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.avatar-placeholder-wrapper,
+.avatar-placeholder-circle {
+  width: 124rpx;
+  height: 124rpx;
+  border-radius: 50%;
+  background: rgba(244, 241, 232, 0.16);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatar-person-head {
+  width: 36rpx;
+  height: 36rpx;
+  border-radius: 50%;
+  background: rgba(244, 241, 232, 0.85);
+  position: absolute;
+  top: 28rpx;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.avatar-person-body {
+  width: 60rpx;
+  height: 36rpx;
+  border-radius: 30rpx 30rpx 0 0;
+  background: rgba(244, 241, 232, 0.85);
+  position: absolute;
+  bottom: 18rpx;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.user-avatar {
+  width: 124rpx;
+  height: 124rpx;
+  border-radius: 50%;
+  border: 4rpx solid rgba(244, 241, 232, 0.75);
+  box-shadow: 0 6rpx 20rpx rgba(0, 0, 0, 0.22);
+}
+
+/* 头像编辑徽标：稻谷金圆 + 铅笔 */
+.avatar-edit-badge {
+  position: absolute;
+  right: -4rpx;
+  bottom: -4rpx;
+  width: 40rpx;
+  height: 40rpx;
+  background: #C9A227;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 3rpx solid #27573C;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.25);
+}
+
+.nickname-edit-row {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  min-width: 0;
+}
+
+/* 长昵称不推挤铅笔图标 */
+.user-header-name {
+  font-size: 38rpx;
+  font-weight: 700;
+  color: #FBF9F3;
+  letter-spacing: 1rpx;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.nick-edit-ic {
+  opacity: 0.7;
+}
+
+.user-header-sub {
+  font-size: 22rpx;
+  color: rgba(244, 241, 232, 0.62);
+  margin-top: 8rpx;
+  letter-spacing: 2rpx;
+}
+
+/* ============ 附加信息：半透玻璃小卡 ============ */
+.user-info-extra {
+  display: flex;
+  flex-direction: column;
+  gap: 18rpx;
+  margin-top: 28rpx;
+  /* 与下方"已选作物"行共同构成卡片底部留白 */
+  margin-bottom: 24rpx;
+}
+
+.info-row {
+  display: flex;
+  gap: 18rpx;
+}
+
+.user-info-item {
+  display: flex;
+  align-items: center;
+  gap: 14rpx;
+  flex: 1;
+  min-width: 0;
+  background: rgba(244, 241, 232, 0.13);
+  border: 1rpx solid rgba(244, 241, 232, 0.22);
+  border-radius: 22rpx;
+  padding: 18rpx 24rpx;
+  box-sizing: border-box;
+}
+
+.user-info-text {
+  font-size: 23rpx;
+  color: #F4F1E8;
+  letter-spacing: 1rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.user-info-clickable {
+  transition: opacity 0.15s ease, background 0.15s ease;
+}
+
+.user-info-clickable:active {
+  opacity: 0.75;
+}
+
+/* 玻璃行按压反馈（hover-class） */
+.row-hover {
+  background: rgba(244, 241, 232, 0.26);
+}
+
+.user-info-arrow {
+  margin-left: auto;
+  font-size: 30rpx;
+  color: rgba(244, 241, 232, 0.5);
+  line-height: 1;
+}
+
+/* 已选作物入口：整行小卡，底色/描边/圆角与上方手机、村庄两枚小卡完全一致，
+   不再单独叠一层深色或金色背景，避免与地平线渐变产生叠色；
+   底部额外留白，不贴卡片底边 */
+.user-info-crops {
+  width: 100%;
+  margin-bottom: 8rpx;
+}
+
+.user-info-crops .user-info-text {
+  color: #F4F1E8;
+}
+
+/* ============ 功能网格 ============ */
+.grid-card {
+  background: var(--card);
+  border: 1rpx solid var(--card-bd);
+  border-radius: 24rpx;
+  padding: 32rpx 12rpx 26rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 1rpx 2rpx rgba(60, 52, 30, 0.04), 0 6rpx 18rpx rgba(60, 52, 30, 0.05);
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.grid-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.grid-icon {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 26rpx;
+  background: var(--g-tint);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 14rpx;
+  position: relative;
+  transition: transform 0.15s ease;
+}
+
+.grid-item:active .grid-icon {
+  transform: scale(0.92);
+}
+
+/* 网格项按压反馈：图标底加深 + 标签转品牌绿 */
+.grid-item-hover .grid-icon {
+  background: #D6E3CD;
+  transform: scale(0.94);
+}
+
+.grid-item-hover .grid-label {
+  color: var(--g600);
+}
+
+.grid-label {
+  font-size: 21rpx;
+  color: var(--ink-2);
+  letter-spacing: 2rpx;
+}
+
+/* "我的回复"入口未读角标 */
+.grid-badge {
+  position: absolute;
+  top: -8rpx;
+  right: -10rpx;
+  min-width: 30rpx;
+  height: 30rpx;
+  line-height: 30rpx;
+  padding: 0 8rpx;
+  border-radius: 30rpx;
+  background: var(--clay);
+  color: #fff;
+  font-size: 20rpx;
+  text-align: center;
+  box-sizing: border-box;
+  border: 2rpx solid var(--card);
+}
+
+/* ============ 分区卡片 ============ */
+.section-card {
+  background: var(--card);
+  border: 1rpx solid var(--card-bd);
+  border-radius: 24rpx;
+  padding: 0 32rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 1rpx 2rpx rgba(60, 52, 30, 0.04), 0 6rpx 18rpx rgba(60, 52, 30, 0.05);
+  overflow: hidden;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 28rpx 0 8rpx;
+}
+
+/* 展开/收起箭头 - CSS绘制 */
+.section-arrow {
+  width: 16rpx;
+  height: 16rpx;
+  border-right: 4rpx solid var(--ink-3);
+  border-bottom: 4rpx solid var(--ink-3);
+  transform: rotate(45deg);
+  transition: transform 0.25s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+.section-arrow-up {
+  transform: rotate(-135deg);
+}
+
+/* ============ 列表行 ============ */
+.list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 26rpx 0;
+  border-bottom: 0.5rpx solid var(--hairline);
+  min-height: 48rpx;
+}
+
+.list-item:last-child {
+  border-bottom: none;
+}
+
+.list-item-left {
+  display: flex;
+  align-items: center;
+  flex: 1;
+}
+
+.list-item-label {
+  font-size: 30rpx;
+  color: var(--ink);
+}
+
+/* ============ 列表小图标 ============ */
+.list-icon {
+  width: 60rpx;
+  height: 60rpx;
+  border-radius: 18rpx;
+  background: var(--g-tint);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 22rpx;
+}
+
+/* ============ 收藏/帮扶记录列表 ============ */
+.list-item-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.fav-main {
+  display: flex;
+  align-items: center;
+  margin-bottom: 4rpx;
+}
+
+.fav-name {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: var(--ink);
+  margin-right: 12rpx;
+}
+
+.fav-tag {
+  font-size: 20rpx;
+  background: var(--g-tint);
+  color: var(--g600);
+  padding: 4rpx 14rpx;
+  border-radius: 8rpx;
+  font-weight: 500;
+}
+
+.fav-addr {
+  font-size: 24rpx;
+  color: var(--ink-3);
+}
+
+.empty-hint {
+  color: var(--ink-3);
+  text-align: center;
+  padding: 32rpx 0;
+  font-size: 26rpx;
+}
+
+.login-hint-inline {
+  padding: 32rpx 0;
+  text-align: center;
+  font-size: 26rpx;
+  color: var(--ink-3);
+}
+
+.login-link {
+  color: var(--g600);
+  font-weight: 500;
+}
+
+/* ============ 反馈新增按钮 ============ */
+.feedback-add-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24rpx 0;
+  margin: 12rpx 0 16rpx;
+  background: var(--g-tint);
+  border: 2rpx dashed rgba(47, 107, 66, 0.35);
+  border-radius: 16rpx;
+  transition: opacity 0.2s;
+}
+
+.feedback-add-btn:active {
+  opacity: 0.7;
+}
+
+.feedback-add-icon {
+  font-size: 36rpx;
+  color: var(--g600);
+  font-weight: 300;
+  margin-right: 8rpx;
+  line-height: 1;
+}
+
+.feedback-add-text {
+  font-size: 28rpx;
+  color: var(--g600);
+  font-weight: 500;
+}
+
+/* ============ 反馈表单 ============ */
+.feedback-form {
+  padding-bottom: 24rpx;
+}
+
+.feedback-input {
+  width: 100%;
+  height: 220rpx;
+  background: var(--paper);
+  border-radius: 16rpx;
+  padding: 24rpx;
+  font-size: 28rpx;
+  box-sizing: border-box;
+  color: var(--ink);
+  border: none;
+}
+
+.feedback-counter {
+  text-align: right;
+  font-size: 24rpx;
+  color: var(--ink-3);
+  margin: 12rpx 0;
+}
+
+.feedback-form-btns {
+  display: flex;
+  align-items: center;
+  gap: 24rpx;
+}
+
+/* 并排双按钮等宽均分，内容（含 loading 图标）严格居中。
+   必须用 .feedback-form-btns button 这一层级覆盖小程序原生
+   button:not([size='mini']) { width:100% } 默认样式，否则单类选择器
+   优先级不够，取消按钮会被撑到整宽、把提交按钮挤偏。 */
+.feedback-form-btns button {
+  flex: 1;
+  width: auto;
+  min-width: 0;
+  height: 80rpx;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28rpx;
+  border-radius: 20rpx;
+  box-sizing: border-box;
+}
+
+/* 清除小程序原生 button 的 ::after 默认描边 */
+.feedback-form-btns button::after {
+  border: none;
+}
+
+.btn-cancel-sm {
+  background: var(--seg-bg);
+  color: var(--ink-2);
+  border: none;
+}
+
+/* ============ 反馈列表项 ============ */
+.feedback-item {
+  padding: 24rpx 0;
+  border-bottom: 0.5rpx solid var(--hairline);
+}
+
+.feedback-item:last-child {
+  border-bottom: none;
+}
+
+.feedback-item-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 8rpx;
+}
+
+.feedback-item-content {
+  font-size: 28rpx;
+  color: var(--ink);
+  line-height: 1.45;
+  flex: 1;
+}
+
+.feedback-item-meta {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  margin-bottom: 8rpx;
+}
+
+.feedback-item-time {
+  font-size: 22rpx;
+  color: var(--ink-3);
+}
+
+/* ============ 关于信息（页面最底部的元信息） ============ */
+.about-simple {
+  text-align: center;
+  padding: 16rpx 0 8rpx;
+}
+
+.about-simple-text {
+  font-size: 22rpx;
+  color: var(--ink-3);
+  letter-spacing: 2rpx;
+}
+
+/* ============ 底部按钮 ============ */
+.bottom-actions {
+  padding: 16rpx 0 0;
+}
+
+.btn-logout {
+  text-align: center;
+  padding: 28rpx 0;
+  color: var(--clay);
+  font-size: 32rpx;
+  font-weight: 600;
+  background: var(--card);
+  border: 1rpx solid var(--card-bd);
+  border-radius: 24rpx;
+  margin-bottom: 16rpx;
+  box-shadow: 0 1rpx 2rpx rgba(60, 52, 30, 0.04), 0 6rpx 18rpx rgba(60, 52, 30, 0.05);
+  letter-spacing: 4rpx;
+  transition: transform 0.15s;
+}
+
+.btn-logout:active {
+  transform: scale(0.97);
+  opacity: 0.9;
+}
+
+.btn-logout.btn-logout-hover {
+  background: #FBF1EC;
+}
+
+/* 清除缓存：弱于"退出登录"的次级操作，但要有可点反馈 */
+.btn-clear-cache {
+  text-align: center;
+  padding: 24rpx 0;
+  margin-top: 8rpx;
+  color: var(--ink-3);
+  font-size: 28rpx;
+  font-weight: 400;
+  border-radius: 20rpx;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.btn-clear-cache.btn-clear-hover {
+  background: var(--paper);
+  color: var(--ink-2);
+}
+
+/* ============ 底部安全距离 ============ */
+.safe-bottom {
+  height: 120rpx;
+}
+
+/* ============ Switch 缩放 ============ */
+switch {
+  transform: scale(0.8);
+  transform-origin: right center;
+}
+
+/* ============ 弹窗通用样式 ============ */
+.modal-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(26, 33, 27, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.modal-content {
+  width: 600rpx;
+  background: var(--card);
+  border: 1rpx solid var(--card-bd);
+  border-radius: 28rpx;
+  padding: 40rpx 36rpx 32rpx;
+  box-shadow: 0 20rpx 60rpx rgba(0, 0, 0, 0.18);
+}
+
+.modal-content-village {
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-title {
+  font-size: 34rpx;
+  font-weight: 600;
+  color: var(--ink);
+  text-align: center;
+  margin-bottom: 12rpx;
+  letter-spacing: 2rpx;
+}
+
+.modal-desc {
+  font-size: 26rpx;
+  color: var(--ink-2);
+  text-align: center;
+  line-height: 1.5;
+  margin-bottom: 32rpx;
+}
+
+.modal-input {
+  width: 100%;
+  height: 88rpx;
+  background: var(--paper);
+  border: 1rpx solid var(--card-bd);
+  border-radius: 16rpx;
+  padding: 0 24rpx;
+  font-size: 30rpx;
+  color: var(--ink);
+  box-sizing: border-box;
+  margin-bottom: 32rpx;
+}
+
+.modal-buttons {
+  display: flex;
+  gap: 20rpx;
+}
+
+.modal-btn {
+  flex: 1;
+  text-align: center;
+  padding: 24rpx 0;
+  border-radius: 16rpx;
+  font-size: 30rpx;
+  font-weight: 500;
+  transition: opacity 0.15s;
+}
+
+.modal-btn:active {
+  opacity: 0.7;
+}
+
+.modal-btn-cancel {
+  background: var(--seg-bg);
+  color: var(--ink-2);
+}
+
+.modal-btn-confirm {
+  background: linear-gradient(160deg, #2F6B42, #3D7A50);
+  color: #fff;
+}
+
+/* ============ 村庄列表 ============ */
+.village-list {
+  max-height: 500rpx;
+  margin-bottom: 24rpx;
+  border-radius: 16rpx;
+  background: var(--paper);
+}
+
+.village-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 28rpx 24rpx;
+  border-bottom: 0.5rpx solid var(--hairline);
+  transition: background 0.15s;
+}
+
+.village-item:last-child {
+  border-bottom: none;
+}
+
+.village-item:active {
+  background: var(--g-tint);
+}
+
+.village-item.village-selected {
+  background: var(--g-tint);
+}
+
+.village-name {
+  font-size: 28rpx;
+  color: var(--ink);
+}
+
+.village-selected .village-name {
+  color: var(--g600);
+  font-weight: 500;
+}
+
+.village-check {
+  font-size: 32rpx;
+  color: var(--g600);
+  font-weight: 600;
+}

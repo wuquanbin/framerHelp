@@ -1,0 +1,681 @@
+/* 首页 · 田园晨野 */
+/* 配色走 app.wxss 的 CSS 变量 */
+
+/* ============ 天气卡片（按天气状态着色，色温统一暖调） ============ */
+.weather-card {
+  color: #fff;
+  border: none;
+  /* 首屏卡与下方内容拉开更强分隔，建立"天气 > 一切"的层级 */
+  margin-bottom: 28rpx;
+  box-shadow: 0 6rpx 24rpx rgba(30, 70, 52, 0.25);
+}
+
+.weather-card.bg-sunny {
+  background: linear-gradient(168deg, #1C4231 0%, #27573C 55%, #4A8A5C 100%);
+}
+
+.weather-card.bg-cloudy {
+  background: linear-gradient(168deg, #3D5A6B 0%, #5F7D8C 55%, #8FA9B5 100%);
+}
+
+.weather-card.bg-overcast {
+  background: linear-gradient(168deg, #4E5A58 0%, #6B7774 55%, #8D9894 100%);
+}
+
+.weather-card.bg-rainy {
+  background: linear-gradient(168deg, #2A3B40 0%, #3E5560 55%, #56707A 100%);
+}
+
+.weather-card.bg-snowy {
+  background: linear-gradient(168deg, #5E7C8C 0%, #84A2B2 55%, #B4CBD6 100%);
+}
+
+.weather-card.bg-foggy {
+  background: linear-gradient(168deg, #6E7568 0%, #8B9184 55%, #ADB3A8 100%);
+}
+
+/* ============ 村镇选择胶囊 ============ */
+.village-picker {
+  margin-bottom: 28rpx;
+}
+
+.village-selector {
+  display: inline-flex;
+  align-items: center;
+  gap: 10rpx;
+  font-size: 26rpx;
+  font-weight: 500;
+  color: #F4F1E8;
+  background: rgba(244, 241, 232, 0.14);
+  border: 1rpx solid rgba(244, 241, 232, 0.25);
+  border-radius: 999rpx;
+  padding: 10rpx 24rpx;
+  letter-spacing: 2rpx;
+  transition: background 0.15s ease;
+}
+
+.village-selector.selector-active {
+  background: rgba(244, 241, 232, 0.24);
+}
+
+.village-selector-text {
+  font-size: 26rpx;
+  font-weight: 500;
+  letter-spacing: 2rpx;
+}
+
+.village-selector-caret {
+  font-size: 20rpx;
+  opacity: 0.7;
+  margin-left: 2rpx;
+}
+
+/* ============ 天气主体：左对齐（视线从村镇 → 天气 → 温度 → 行动指引，一条线读完） ============ */
+.weather-main {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+/* 加载中：温度数字呼吸，替代生硬的"加载中"文字替换 */
+.weather-main.is-loading .weather-temp,
+.weather-main.is-loading .weather-now-icon {
+  animation: weather-pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes weather-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.weather-now {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  margin-bottom: 8rpx;
+}
+
+.weather-now-icon {
+  font-size: 56rpx;
+  line-height: 1;
+}
+
+.weather-now-text {
+  display: flex;
+  align-items: baseline;
+  gap: 16rpx;
+}
+
+.weather-type {
+  font-size: 34rpx;
+  font-weight: 600;
+  letter-spacing: 2rpx;
+}
+
+.weather-range {
+  font-size: 26rpx;
+  opacity: 0.78;
+  letter-spacing: 1rpx;
+}
+
+.weather-temp-row {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 28rpx;
+}
+
+.weather-temp {
+  font-size: 132rpx;
+  font-weight: 300;
+  letter-spacing: -4rpx;
+  line-height: 1;
+}
+
+.weather-temp-side {
+  display: flex;
+  flex-direction: column;
+  margin-left: 8rpx;
+  margin-top: 10rpx;
+}
+
+.weather-temp-unit {
+  font-size: 44rpx;
+  font-weight: 300;
+  opacity: 0.6;
+}
+
+.weather-feels-label {
+  font-size: 26rpx;
+  opacity: 0.72;
+  margin-top: 4rpx;
+}
+
+/* 今日农事：首屏行动指引条（半透玻璃，压得住任何天气底色） */
+.hero-advice {
+  display: flex;
+  align-items: flex-start;
+  gap: 14rpx;
+  width: 100%;
+  box-sizing: border-box;
+  background: rgba(244, 241, 232, 0.14);
+  border: 1rpx solid rgba(244, 241, 232, 0.22);
+  border-radius: 18rpx;
+  padding: 18rpx 20rpx;
+}
+
+.hero-advice-label {
+  font-size: 22rpx;
+  font-weight: 600;
+  color: #fff;
+  background: rgba(201, 162, 39, 0.92);
+  padding: 4rpx 14rpx;
+  border-radius: 10rpx;
+  flex-shrink: 0;
+  letter-spacing: 2rpx;
+  margin-top: 2rpx;
+}
+
+.hero-advice-text {
+  font-size: 26rpx;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.94);
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+
+/* 预警标签 */
+.weather-warnings {
+  display: flex;
+  gap: 16rpx;
+  margin-top: 20rpx;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+
+.weather-warning-tag {
+  display: flex;
+  align-items: center;
+  gap: 10rpx;
+  background: rgba(176, 69, 43, 0.88);
+  border: 1rpx solid rgba(244, 241, 232, 0.25);
+  padding: 10rpx 22rpx;
+  border-radius: 999rpx;
+}
+
+.warning-text {
+  font-size: 26rpx;
+  font-weight: 500;
+  color: #fff;
+}
+
+/* ============ 卡片标题（带图标） ============ */
+.title-with-icon {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+}
+
+.title-ic {
+  opacity: 0.9;
+}
+
+/* 标题行：左标题 + 右侧辅助信息 */
+.card-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24rpx;
+}
+
+.card-title-row .card-title {
+  margin-bottom: 0;
+}
+
+.forecast-count-tag {
+  font-size: 22rpx;
+  color: var(--ink-3);
+  background: var(--paper);
+  border: 1rpx solid var(--hairline);
+  padding: 4rpx 16rpx;
+  border-radius: 999rpx;
+  letter-spacing: 1rpx;
+}
+
+/* ============ 农事指数 ============ */
+.farm-index-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20rpx;
+}
+
+.farm-index-item {
+  width: calc(50% - 10rpx);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: var(--paper);
+  border: 1rpx solid var(--hairline);
+  border-radius: 16rpx;
+  padding: 24rpx 16rpx;
+  transition: transform 0.2s ease, background 0.15s ease;
+}
+
+.farm-index-item.farm-item-hover {
+  background: var(--g-tint);
+}
+
+.farm-index-icon {
+  font-size: 48rpx;
+  margin-bottom: 8rpx;
+}
+
+.farm-index-name {
+  font-size: 26rpx;
+  color: var(--ink);
+  font-weight: 500;
+  margin-bottom: 8rpx;
+}
+
+.farm-index-level {
+  font-size: 24rpx;
+  font-weight: 600;
+  padding: 4rpx 16rpx;
+  border-radius: 16rpx;
+  letter-spacing: 2rpx;
+}
+
+.farm-level-suitable {
+  background: var(--g-tint);
+  color: var(--g600);
+}
+
+.farm-level-caution {
+  background: var(--gold-tint);
+  color: var(--gold-deep);
+}
+
+.farm-level-unsuitable {
+  background: var(--clay-tint);
+  color: var(--clay);
+}
+
+/* ============ 预报与农事建议 ============ */
+.forecast-card {
+  background: var(--card);
+}
+
+.forecast-list {
+  margin-top: 4rpx;
+}
+
+.forecast-item {
+  padding: 24rpx 0;
+  border-bottom: 0.5rpx solid var(--hairline);
+}
+
+.forecast-item:last-child {
+  border-bottom: none;
+}
+
+/* 今天行：时间锚点。「今天」二字做成绿底胶囊，一眼锁定当下 */
+.forecast-today .forecast-day {
+  display: inline-block;
+  background: var(--g600);
+  color: #fff;
+  font-size: 24rpx;
+  padding: 4rpx 16rpx;
+  border-radius: 999rpx;
+}
+
+.forecast-today .temp-high {
+  font-weight: 700;
+}
+
+.forecast-past {
+  opacity: 0.45;
+}
+
+.forecast-left {
+  display: flex;
+  align-items: center;
+  gap: 24rpx;
+}
+
+.forecast-date-row {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 96rpx;
+}
+
+.forecast-day {
+  font-size: 28rpx;
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.forecast-date {
+  font-size: 24rpx;
+  color: var(--ink-3);
+  margin-top: 4rpx;
+}
+
+.forecast-middle {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  flex: 1;
+  min-width: 0;
+}
+
+.forecast-icon {
+  font-size: 40rpx;
+}
+
+.forecast-weather {
+  font-size: 26rpx;
+  color: var(--ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 降水概率：贴近天气文字，弱化为辅助信息 */
+.forecast-rain {
+  font-size: 24rpx;
+  color: var(--g600);
+  font-weight: 500;
+  flex-shrink: 0;
+}
+
+.forecast-temp {
+  display: flex;
+  align-items: center;
+  gap: 4rpx;
+  flex-shrink: 0;
+}
+
+/* 高温陶红 / 低温次级灰：气象语义色，扫读更快 */
+.temp-high {
+  font-size: 30rpx;
+  color: var(--clay);
+  font-weight: 600;
+}
+
+.temp-sep {
+  font-size: 26rpx;
+  color: var(--ink-3);
+  margin: 0 4rpx;
+}
+
+.temp-low {
+  font-size: 30rpx;
+  color: var(--ink-2);
+  font-weight: 500;
+}
+
+.forecast-advice {
+  margin-top: 16rpx;
+  display: flex;
+  align-items: flex-start;
+  gap: 12rpx;
+  background: var(--g-tint);
+  border-radius: 16rpx;
+  padding: 18rpx;
+}
+
+.advice-label {
+  font-size: 22rpx;
+  background: var(--g600);
+  color: #fff;
+  padding: 4rpx 12rpx;
+  border-radius: 8rpx;
+  flex-shrink: 0;
+  letter-spacing: 2rpx;
+}
+
+/* 建议正文用主墨色：这是农户要执行的行动指令，对比度优先于品牌感 */
+.advice-text {
+  font-size: 26rpx;
+  color: var(--ink);
+  line-height: 1.65;
+}
+
+/* 展开按钮：图标指示方向 + 按压反馈，替代纯文字 */
+.forecast-more-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10rpx;
+  padding: 28rpx;
+  margin-top: 12rpx;
+  border-radius: 16rpx;
+  transition: background 0.15s ease;
+}
+
+.forecast-more-btn.more-btn-hover {
+  background: var(--g-tint);
+}
+
+.more-btn-text {
+  color: var(--g600);
+  font-size: 28rpx;
+  font-weight: 500;
+  letter-spacing: 2rpx;
+}
+
+.more-caret {
+  width: 14rpx;
+  height: 14rpx;
+  border-right: 3rpx solid var(--g600);
+  border-bottom: 3rpx solid var(--g600);
+  transform: rotate(45deg);
+  margin-top: -6rpx;
+  transition: transform 0.25s ease, margin-top 0.25s ease;
+}
+
+.more-caret.is-open {
+  transform: rotate(-135deg);
+  margin-top: 6rpx;
+}
+
+/* ============ 灾害预警区域 ============ */
+.warning-item {
+  display: flex;
+  align-items: flex-start;
+  padding: 20rpx 0;
+  border-bottom: 0.5rpx solid var(--hairline);
+}
+
+.warning-item:last-child {
+  border-bottom: none;
+}
+
+.warning-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.warning-title {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 6rpx;
+}
+
+.warning-desc {
+  line-height: 1.5;
+}
+
+/* ============ 快捷操作：AI 深绿实底做主推，浅底卡为辅 ============ */
+.quick-actions {
+  display: flex;
+  gap: 20rpx;
+  margin-bottom: 20rpx;
+}
+
+.quick-action-btn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: var(--card);
+  border: 1rpx solid var(--card-bd);
+  border-radius: 24rpx;
+  padding: 28rpx 12rpx;
+  box-shadow: 0 1rpx 2rpx rgba(60, 52, 30, 0.04), 0 6rpx 18rpx rgba(60, 52, 30, 0.05);
+  transition: transform 0.2s ease;
+}
+
+.quick-action-btn:active,
+.quick-action-btn.qa-hover {
+  transform: scale(0.96);
+}
+
+.quick-icon-wrap {
+  width: 88rpx;
+  height: 88rpx;
+  border-radius: 26rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12rpx;
+}
+
+.quick-green {
+  background: var(--g-tint);
+}
+
+.quick-orange {
+  background: var(--clay-tint);
+}
+
+/* AI 主推卡：唯一深色实底，打破三卡均质 */
+.quick-ai {
+  background: linear-gradient(160deg, #2F6B42, #3D7A50);
+  border-color: transparent;
+  box-shadow: 0 6rpx 18rpx rgba(47, 107, 66, 0.3);
+}
+
+.quick-ai-inner {
+  background: rgba(244, 241, 232, 0.16);
+}
+
+.quick-ai .quick-action-label {
+  color: #F4F1E8;
+}
+
+.quick-action-label {
+  font-size: 24rpx;
+  font-weight: 500;
+  color: var(--ink);
+  letter-spacing: 1rpx;
+  white-space: nowrap;
+}
+
+/* ============ 方言播报卡片（稻谷金主题 · 降调处理：功能未上线，视觉让位） ============ */
+.dialect-card {
+  background: var(--card);
+  border: 1rpx solid rgba(201, 162, 39, 0.28);
+}
+
+.dialect-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12rpx;
+}
+
+.dialect-title {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.dialect-tag {
+  font-size: 22rpx;
+  background: var(--gold-tint);
+  color: var(--gold-deep);
+  padding: 4rpx 16rpx;
+  border-radius: 16rpx;
+  font-weight: 500;
+  letter-spacing: 2rpx;
+}
+
+.dialect-desc {
+  margin-bottom: 20rpx;
+  line-height: 1.6;
+}
+
+.dialect-btn-placeholder {
+  display: inline-flex;
+  align-items: center;
+  gap: 10rpx;
+  background: var(--paper);
+  border: 1rpx dashed rgba(160, 126, 20, 0.35);
+  border-radius: 40rpx;
+  padding: 16rpx 32rpx;
+  opacity: 0.75;
+}
+
+.dialect-btn-ic {
+  opacity: 0.9;
+}
+
+.dialect-btn-text {
+  font-size: 28rpx;
+  color: var(--gold-deep);
+  font-weight: 500;
+  letter-spacing: 2rpx;
+}
+
+/* ========== 灾害预警卡片动态配色 ========== */
+.warning-card {
+  border-left: 8rpx solid #C9C227;
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+.warning-card-title {
+  color: var(--ink);
+}
+
+/* 蓝色预警 */
+.warning-card-blue {
+  background: linear-gradient(135deg, rgba(62, 110, 143, 0.08), rgba(62, 110, 143, 0.02));
+  border-left-color: #3E6E8F;
+}
+.warning-card-blue .warning-card-title {
+  color: #3E6E8F;
+}
+
+/* 黄色预警 */
+.warning-card-yellow {
+  background: linear-gradient(135deg, rgba(201, 194, 39, 0.12), rgba(201, 194, 39, 0.03));
+  border-left-color: #C9C227;
+}
+.warning-card-yellow .warning-card-title {
+  color: var(--gold-deep);
+}
+
+/* 橙色预警 */
+.warning-card-orange {
+  background: linear-gradient(135deg, rgba(201, 162, 39, 0.12), rgba(201, 162, 39, 0.03));
+  border-left-color: var(--gold);
+}
+.warning-card-orange .warning-card-title {
+  color: var(--gold-deep);
+}
+
+/* 红色预警 */
+.warning-card-red {
+  background: linear-gradient(135deg, rgba(176, 69, 43, 0.10), rgba(176, 69, 43, 0.02));
+  border-left-color: var(--clay);
+}
+.warning-card-red .warning-card-title {
+  color: var(--clay);
+}
+
+/* 加载失败提示（后端未启动 / 电脑 IP 变化时的兜底 UI） */

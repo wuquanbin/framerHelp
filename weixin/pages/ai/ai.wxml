@@ -1,0 +1,152 @@
+<view class="chat-page">
+  <!-- 顶部模式切换 -->
+  <view class="mode-switcher">
+    <view class="mode-tabs">
+      <view class="mode-tab {{chatMode === 'AI' ? 'mode-active' : ''}}" bindtap="switchToAI">
+        <view class="ic {{chatMode === 'AI' ? 'ic-robot-cream' : 'ic-robot-gray'}} ic-sm mode-icon"></view>
+        <text class="mode-label">AI 助手</text>
+      </view>
+      <view class="mode-tab expert-tab {{chatMode === 'HUMAN' ? 'mode-active' : ''}}" bindtap="switchToHuman">
+        <view class="ic {{chatMode === 'HUMAN' ? 'ic-expert-cream' : 'ic-expert-gray'}} ic-sm mode-icon"></view>
+        <text class="mode-label">人工农技专家</text>
+        <view class="mode-expert-dot" wx:if="{{expertOnlineCount > 0}}">
+          <text>{{expertOnlineCount}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 人工模式状态条 -->
+    <view wx:if="{{chatMode === 'HUMAN'}}" class="human-status-bar">
+      <block wx:if="{{humanStatus === 'NONE'}}">
+        <text class="status-dot gray"></text>
+        <text class="status-text">未连接人工客服，点击下方「转人工」按钮发起</text>
+      </block>
+      <block wx:elif="{{humanStatus === 'REQUESTING'}}">
+        <text class="status-dot blue pulse"></text>
+        <text class="status-text">正在为您连接...</text>
+      </block>
+      <block wx:elif="{{humanStatus === 'WAITING'}}">
+        <text class="status-dot orange pulse"></text>
+        <text class="status-text">等待专家接单...（当前在线专家 {{expertOnlineCount}} 人）</text>
+      </block>
+      <block wx:elif="{{humanStatus === 'ACTIVE'}}">
+        <text class="status-dot green"></text>
+        <text class="status-text">专家「{{adminInfo.realName || '农技专家'}}」正在为您服务</text>
+      </block>
+      <block wx:elif="{{humanStatus === 'CLOSED'}}">
+        <text class="status-dot gray"></text>
+        <text class="status-text">会话已结束</text>
+      </block>
+      <view wx:if="{{humanStatus === 'ACTIVE' || humanStatus === 'WAITING' || humanStatus === 'CLOSED'}}" class="status-actions">
+        <text wx:if="{{humanStatus === 'ACTIVE' || humanStatus === 'WAITING'}}" class="status-action-btn" bindtap="closeHumanSession">结束会话</text>
+        <text wx:if="{{humanStatus === 'CLOSED' && chatMode === 'HUMAN'}}" class="status-action-btn primary" bindtap="requestHuman">再次请求</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 消息滚动区 -->
+  <scroll-view class="chat-messages" scroll-y scroll-into-view="{{scrollToId}}" enhanced show-scrollbar="{{false}}">
+    <!-- AI 欢迎语（AI 模式才显示） -->
+    <view wx:if="{{chatMode === 'AI' && messages.length <= 0}}" class="msg-row msg-ai" id="msg-welcome">
+      <view class="msg-avatar ai-avatar"><view class="ic ic-robot-cream ic-sm"></view></view>
+      <view class="msg-bubble ai-bubble welcome-bubble">
+        <view class="welcome-title">你好，我是气象农事助手</view>
+        <view class="welcome-desc">我可以为你解答农事和天气相关问题，试试问我：</view>
+        <view class="welcome-list">
+          <view class="welcome-item" bindtap="askQuick" data-q="水稻抽穗期遇下雨怎么办？">水稻抽穗期遇下雨怎么办？</view>
+          <view class="welcome-item" bindtap="askQuick" data-q="本周农事注意事项">本周农事注意事项</view>
+          <view class="welcome-item" bindtap="askQuick" data-q="台风后如何补救农作物">台风后如何补救农作物</view>
+          <view class="welcome-item" bindtap="askQuick" data-q="当前适合种植什么作物">当前适合种植什么作物</view>
+        </view>
+      </view>
+    </view>
+    <view wx:else class="msg-row" id="msg-welcome"></view>
+
+    <!-- 人工模式下的提示（还未请求过人工时） -->
+    <view wx:if="{{chatMode === 'HUMAN' && showTransferTip && humanStatus === 'NONE'}}" class="human-welcome-card">
+      <view class="hwc-icon"><view class="ic ic-expert-cream"></view></view>
+      <view class="hwc-main">
+        <view class="hwc-title">人工农技专家</view>
+        <view class="hwc-desc">AI回答不够精准？一键转人工客服，实时解答种植、施肥、排水等问题</view>
+        <view class="hwc-info">当前在线专家 {{expertOnlineCount}} 人 · 平均响应 3 分钟</view>
+        <view class="hwc-btn" bindtap="requestHuman"><view class="ic ic-phone-cream ic-sm hwc-btn-ic"></view>转人工客服</view>
+      </view>
+    </view>
+
+    <!-- 消息列表 -->
+    <view wx:for="{{messages}}" wx:key="id" id="msg-{{item.id}}" class="msg-row {{item.role === 'user' ? 'msg-user' : 'msg-ai'}}">
+      <!-- 左侧头像 -->
+      <view wx:if="{{item.role !== 'user'}}" class="msg-avatar {{item.role === 'ai' ? 'ai-avatar' : (item.isSystem ? 'system-avatar' : 'human-avatar')}}">
+        <block wx:if="{{item.role === 'ai'}}"><view class="ic ic-robot-cream ic-sm"></view></block>
+        <block wx:elif="{{item.isSystem}}"><view class="ic ic-info ic-sm"></view></block>
+        <block wx:else><view class="ic ic-expert-cream ic-sm"></view></block>
+      </view>
+
+      <view class="msg-bubble-wrap">
+        <view wx:if="{{item.role === 'human' && !item.isSystem}}" class="msg-role-tag">
+          <text>{{item.senderName || '农技专家'}}</text>
+          <text wx:if="{{item.time && item.showTime}}" class="msg-time">{{item.time}}</text>
+        </view>
+        <view class="msg-bubble {{item.role === 'user' ? 'user-bubble' : (item.role === 'ai' ? 'ai-bubble' : (item.isSystem ? 'system-bubble' : 'human-bubble'))}}">
+          <text wx:if="{{item.role === 'user'}}" class="msg-text">{{item.content}}</text>
+          <!-- AI 气泡：流式过程中还没收到字时显示打字动画，收到第一个字就切成正文 -->
+          <block wx:elif="{{item.role === 'ai'}}">
+            <rich-text wx:if="{{item.content}}" nodes="{{item.contentNodes}}" class="msg-richtext" />
+            <view wx:else class="typing-indicator">
+              <view class="typing-dot"></view>
+              <view class="typing-dot"></view>
+              <view class="typing-dot"></view>
+            </view>
+          </block>
+          <text wx:elif="{{item.isSystem}}" class="msg-text">{{item.content}}</text>
+          <rich-text wx:else nodes="{{item.contentNodes}}" class="msg-richtext msg-richtext-plain" />
+        </view>
+        <view wx:if="{{item.role === 'user' && item.time && item.showTime}}" class="msg-time msg-time-right">{{item.time}}</view>
+      </view>
+
+      <!-- 右侧用户头像 -->
+      <view wx:if="{{item.role === 'user'}}" class="msg-avatar user-avatar">{{userInitial}}</view>
+    </view>
+
+    <!-- AI 模式下常见问题（仅空消息时） -->
+    <view class="quick-section" wx:if="{{chatMode === 'AI' && messages.length <= 0}}">
+      <view class="quick-section-title">常见问题</view>
+      <view class="quick-grid">
+        <view class="quick-item" bindtap="askQuick" data-q="水稻抽穗期遇下雨怎么办？">
+          <view class="quick-icon-view"><view class="ic ic-wheat ic-sm"></view></view>
+          <text class="quick-text">水稻下雨怎么办</text>
+        </view>
+        <view class="quick-item" bindtap="askQuick" data-q="本周农事注意事项">
+          <view class="quick-icon-view"><view class="ic ic-calendar ic-sm"></view></view>
+          <text class="quick-text">本周农事</text>
+        </view>
+        <view class="quick-item" bindtap="askQuick" data-q="台风后如何补救农作物？">
+          <view class="quick-icon-view"><view class="ic ic-wind ic-sm"></view></view>
+          <text class="quick-text">台风补救</text>
+        </view>
+        <view class="quick-item" bindtap="askQuick" data-q="当前适合种植什么作物？">
+          <view class="quick-icon-view"><view class="ic ic-sprout ic-sm"></view></view>
+          <text class="quick-text">适合种啥</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="bottom-spacer"></view>
+  </scroll-view>
+
+  <!-- 输入框 -->
+  <view class="chat-input-bar">
+    <input class="chat-input"
+           placeholder="{{chatMode === 'HUMAN' ? '向专家提问...' : '问我农事和天气问题...'}}"
+           placeholder-class="input-placeholder"
+           value="{{inputText}}"
+           bindinput="onInput"
+           bindconfirm="sendMessage"
+           confirm-type="send"
+           adjust-position="{{true}}"
+           hold-keyboard="{{false}}" />
+    <view class="send-btn {{inputText ? 'send-btn-active' : ''}}" bindtap="sendMessage">
+      <text class="send-icon">↑</text>
+    </view>
+  </view>
+</view>

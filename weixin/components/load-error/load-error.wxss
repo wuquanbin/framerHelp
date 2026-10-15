@@ -1,0 +1,76 @@
+/* 加载失败 · 重试
+   只写标准属性（不写 -webkit- 前缀）：小程序样式表同样会被压缩，
+   手写前缀版本会被当成同名属性覆盖掉标准写法。 */
+
+.le {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  box-sizing: border-box;
+  padding: 28rpx 24rpx;
+  margin: 24rpx 0;
+  border: 1rpx solid var(--clay-tint);
+  border-left: 6rpx solid var(--clay);
+  border-radius: 18rpx;
+  background: var(--card);
+  box-shadow: 0 2rpx 10rpx rgba(38, 51, 43, 0.05);
+}
+
+.le-badge {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: 50%;
+  background: var(--clay);
+}
+
+.le-body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6rpx;
+}
+
+.le-title {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.4;
+}
+
+.le-msg,
+.le-hint {
+  font-size: 23rpx;
+  color: var(--ink-2);
+  line-height: 1.5;
+  /* 后端偶发会带一段很长的堆栈，最多两行，避免把卡片撑爆 */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.le-btn {
+  flex: none;
+  box-sizing: border-box;
+  padding: 0 26rpx;
+  /* 72rpx = 36px，配合左右 padding 拿到足够的热区。
+     原来 62rpx(31px) 低于 44px 的可点击下限，真机上容易点空。 */
+  height: 72rpx;
+  line-height: 72rpx;
+  border-radius: 36rpx;
+  background: var(--g600);
+  color: #fff;
+  font-size: 25rpx;
+  font-weight: 500;
+  text-align: center;
+}
+
+.le-btn-hover {
+  background: var(--g700);
+  opacity: 0.92;
+}

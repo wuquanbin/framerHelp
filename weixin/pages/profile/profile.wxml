@@ -1,0 +1,224 @@
+<view class="page">
+  <!-- 顶部用户区 · 田园晨野（深绿 + 远山稻田剪影，纯 CSS 无 emoji） -->
+  <view class="user-header">
+    <view class="user-header-inner is-anonymous" wx:if="{{!isLoggedIn}}" bindtap="onWechatLogin">
+      <view class="avatar-wrapper">
+        <view class="avatar-placeholder-circle">
+          <view class="avatar-person-head"></view>
+          <view class="avatar-person-body"></view>
+        </view>
+      </view>
+      <text class="user-header-name">点击登录</text>
+      <text class="user-header-sub">登录享受更多帮扶服务</text>
+    </view>
+
+    <view class="user-header-inner" wx:if="{{isLoggedIn && userInfo}}">
+      <view class="uh-top">
+        <view class="avatar-wrapper" bindtap="onChooseAvatar">
+          <image class="user-avatar" wx:if="{{userInfo.avatarUrl}}" src="{{userInfo.avatarUrl}}" mode="aspectFill" />
+          <view class="avatar-placeholder-circle" wx:else>
+            <view class="avatar-person-head"></view>
+            <view class="avatar-person-body"></view>
+          </view>
+          <view class="avatar-edit-badge">
+            <view class="ic ic-pencil-cream ic-xs"></view>
+          </view>
+        </view>
+        <view class="uh-user-info">
+          <view class="nickname-edit-row" bindtap="onEditNickname">
+            <text class="user-header-name">{{userInfo.nickname || '微信用户'}}</text>
+            <view class="ic ic-pencil-cream ic-xs nick-edit-ic"></view>
+          </view>
+          <text class="user-header-sub">点击头像或昵称可修改</text>
+        </view>
+      </view>
+
+      <!-- 用户附加信息：米白半透玻璃小卡 -->
+      <view class="user-info-extra">
+        <view class="info-row">
+          <view class="user-info-item user-info-clickable" hover-class="row-hover" hover-stay-time="60" bindtap="openPhoneModal">
+            <view class="ic ic-phone-cream ic-sm"></view>
+            <text class="user-info-text">{{userInfo.phone || '未绑定手机号'}}</text>
+            <text class="user-info-arrow">›</text>
+          </view>
+          <view class="user-info-item user-info-clickable" hover-class="row-hover" hover-stay-time="60" bindtap="openVillageModal">
+            <view class="ic ic-home-cream ic-sm"></view>
+            <text class="user-info-text">{{userInfo.villageName || '未选择村庄'}}</text>
+            <text class="user-info-arrow">›</text>
+          </view>
+        </view>
+        <!-- 已选作物入口：整行玻璃小卡，与上方两枚同族 -->
+        <view class="user-info-item user-info-crops user-info-clickable" hover-class="row-hover" hover-stay-time="60" bindtap="goToMyCrops">
+          <view class="ic ic-wheat-cream ic-sm"></view>
+          <text class="user-info-text">{{myCropsText}}</text>
+          <text class="user-info-arrow">›</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 功能网格 - 4列 -->
+  <view class="grid-card">
+    <view class="grid-item" hover-class="grid-item-hover" hover-stay-time="60" bindtap="onGridTap" data-type="assistance">
+      <view class="grid-icon">
+        <view class="ic ic-clipboard"></view>
+      </view>
+      <text class="grid-label">帮扶记录</text>
+    </view>
+    <view class="grid-item" hover-class="grid-item-hover" hover-stay-time="60" bindtap="onGridTap" data-type="feedback">
+      <view class="grid-icon">
+        <view class="ic ic-chat"></view>
+      </view>
+      <text class="grid-label">意见反馈</text>
+    </view>
+    <view class="grid-item" hover-class="grid-item-hover" hover-stay-time="60" bindtap="onGridTap" data-type="my-replies">
+      <view class="grid-icon">
+        <view class="ic ic-inbox"></view>
+        <!-- 管理员回复未读角标，超过 99 显示 99+ -->
+        <view class="grid-badge" wx:if="{{unreadCount > 0}}">{{unreadCount > 99 ? '99+' : unreadCount}}</view>
+      </view>
+      <text class="grid-label">我的回复</text>
+    </view>
+    <view class="grid-item" hover-class="grid-item-hover" hover-stay-time="60" bindtap="onGridTap" data-type="setting">
+      <view class="grid-icon">
+        <view class="ic ic-bell"></view>
+      </view>
+      <text class="grid-label">通知设置</text>
+    </view>
+  </view>
+
+  <!-- 帮扶记录 - 展开收起 -->
+  <view class="section-card" wx:if="{{showAssistancePanel}}" id="section-assistance">
+    <view class="section-header" bindtap="toggleAssistance">
+      <text class="section-title">帮扶记录</text>
+      <view class="section-arrow {{showAssistancePanel ? 'section-arrow-up' : ''}}"></view>
+    </view>
+    <view wx:if="{{isLoggedIn}}">
+      <view wx:if="{{assistanceRecords.length > 0}}">
+        <view class="list-item" wx:for="{{assistanceRecords}}" wx:key="id">
+          <view class="list-item-content">
+            <view class="fav-main">
+              <text class="fav-name">{{item.title || item.type}}</text>
+              <text class="fav-tag" wx:if="{{item.status}}">{{item.status}}</text>
+            </view>
+            <text class="fav-addr">{{item.description || item.date}}</text>
+          </view>
+        </view>
+      </view>
+      <view class="empty-hint" wx:else>暂无帮扶记录</view>
+    </view>
+    <view class="login-hint-inline" wx:else>
+      <text class="login-link" bindtap="onWechatLogin">登录</text>后查看帮扶记录
+    </view>
+  </view>
+
+  <!-- 意见反馈 -->
+  <view class="section-card" wx:if="{{showFeedbackPanel}}" id="section-feedback">
+    <view class="section-header" bindtap="toggleFeedback">
+      <text class="section-title">意见反馈</text>
+      <view class="section-arrow {{showFeedbackPanel ? 'section-arrow-up' : ''}}"></view>
+    </view>
+    <view wx:if="{{isLoggedIn}}">
+      <!-- 提交新反馈按钮 -->
+      <view class="feedback-add-btn" bindtap="openFeedbackForm" wx:if="{{!showFeedbackForm}}">
+        <text class="feedback-add-icon">+</text>
+        <text class="feedback-add-text">提交新反馈</text>
+      </view>
+      <!-- 反馈表单 -->
+      <view class="feedback-form" wx:if="{{showFeedbackForm}}">
+        <textarea class="feedback-input" placeholder="请描述您遇到的问题或建议..." value="{{feedbackContent}}" bindinput="onFeedbackInput" maxlength="500" />
+        <view class="feedback-counter">{{feedbackContent.length}}/500</view>
+        <view class="feedback-form-btns">
+          <button class="btn-cancel-sm" bindtap="closeFeedbackForm">取消</button>
+          <button class="btn-primary" bindtap="submitFeedback" loading="{{feedbackSubmitting}}">提交反馈</button>
+        </view>
+      </view>
+      <!-- 反馈列表 -->
+      <view wx:if="{{feedbacks.length > 0}}">
+        <view class="feedback-item" wx:for="{{feedbacks}}" wx:key="id">
+          <view class="feedback-item-header">
+            <text class="feedback-item-content">{{item.content}}</text>
+          </view>
+          <view class="feedback-item-meta">
+            <text class="feedback-item-time">{{item.timeText}}</text>
+          </view>
+        </view>
+      </view>
+      <view class="empty-hint" wx:elif="{{!showFeedbackForm}}">暂无反馈记录</view>
+    </view>
+    <view class="login-hint-inline" wx:else>
+      <text class="login-link" bindtap="onWechatLogin">登录</text>后查看反馈
+    </view>
+  </view>
+
+  <!-- 通知设置 -->
+  <view class="section-card" id="section-setting">
+    <view class="section-header">
+      <text class="section-title">通知设置</text>
+    </view>
+    <view class="list-item">
+      <view class="list-item-left">
+        <view class="list-icon">
+          <view class="ic ic-warn ic-sm"></view>
+        </view>
+        <text class="list-item-label">灾害预警推送</text>
+      </view>
+      <switch checked="{{notifyWarning}}" bindchange="onNotifyWarningChange" color="#2F6B42" />
+    </view>
+    <view class="list-item" wx:if="{{isLoggedIn}}">
+      <view class="list-item-left">
+        <view class="list-icon">
+          <view class="ic ic-sprout ic-sm"></view>
+        </view>
+        <text class="list-item-label">农事提醒通知</text>
+      </view>
+      <switch checked="{{notifyFarming}}" bindchange="onNotifyFarmingChange" color="#2F6B42" />
+    </view>
+  </view>
+
+  <!-- 账号操作 -->
+  <view class="bottom-actions">
+    <view class="btn-logout" wx:if="{{isLoggedIn}}" hover-class="btn-logout-hover" hover-stay-time="60" bindtap="onLogout">退出登录</view>
+    <view class="btn-clear-cache" hover-class="btn-clear-hover" hover-stay-time="60" bindtap="clearCache">
+      <text>清除本地缓存</text>
+    </view>
+  </view>
+
+  <!-- 关于信息：沉到页面最底部，元信息不占主视线 -->
+  <view class="about-simple">
+    <text class="about-simple-text">乡村公益农业气象帮扶服务 v1.0.0</text>
+  </view>
+
+  <!-- 底部安全距离 -->
+  <view class="safe-bottom"></view>
+
+  <!-- 绑定手机号弹窗 -->
+  <view class="modal-mask" wx:if="{{showPhoneModal}}" bindtap="closePhoneModal">
+    <view class="modal-content" catchtap="stopPropagation">
+      <view class="modal-title">绑定手机号</view>
+      <view class="modal-desc">请输入您的手机号，方便接收农事提醒和帮扶通知</view>
+      <input class="modal-input" type="number" maxlength="11" placeholder="请输入11位手机号" value="{{phoneInput}}" bindinput="onPhoneInput" focus="{{showPhoneModal}}" />
+      <view class="modal-buttons">
+        <view class="modal-btn modal-btn-cancel" bindtap="closePhoneModal">取消</view>
+        <view class="modal-btn modal-btn-confirm" bindtap="confirmPhone">确定</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 选择村庄弹窗 -->
+  <view class="modal-mask" wx:if="{{showVillageModal}}" bindtap="closeVillageModal">
+    <view class="modal-content modal-content-village" catchtap="stopPropagation">
+      <view class="modal-title">选择所属村庄</view>
+      <view class="modal-desc">选择您所在的村庄，获取精准的本地天气和农事服务</view>
+      <scroll-view class="village-list" scroll-y>
+        <view class="village-item {{item.code === userInfo.villageCode ? 'village-selected' : ''}}" wx:for="{{villageList}}" wx:key="code" bindtap="selectVillage" data-code="{{item.code}}" data-name="{{item.name}}">
+          <text class="village-name">{{item.name}}</text>
+          <text class="village-check" wx:if="{{item.code === userInfo.villageCode}}">✓</text>
+        </view>
+      </scroll-view>
+      <view class="modal-buttons">
+        <view class="modal-btn modal-btn-cancel" bindtap="closeVillageModal">取消</view>
+      </view>
+    </view>
+  </view>
+</view>

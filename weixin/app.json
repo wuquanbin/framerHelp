@@ -1,0 +1,71 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/farming/farming",
+    "pages/community/community",
+    "pages/community/detail/detail",
+    "pages/community/create/create",
+    "pages/profile/profile",
+    "pages/ai/ai",
+    "pages/my-replies/my-replies",
+    "pages/my-crops/my-crops"
+  ],
+  "window": {
+    "navigationBarTitleText": "乡村农业气象帮扶",
+    "navigationBarBackgroundColor": "#1E4634",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#F4F1E8",
+    "backgroundTextStyle": "dark"
+  },
+  "tabBar": {
+    "custom": true,
+    "color": "#A9A48C",
+    "selectedColor": "#2F6B42",
+    "backgroundColor": "#FDFCF8",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页",
+        "iconPath": "images/tab-home.png",
+        "selectedIconPath": "images/tab-home-active.png"
+      },
+      {
+        "pagePath": "pages/farming/farming",
+        "text": "农事",
+        "iconPath": "images/tab-home.png",
+        "selectedIconPath": "images/tab-home-active.png"
+      },
+      {
+        "pagePath": "pages/ai/ai",
+        "text": "AI",
+        "iconPath": "images/tab-home.png",
+        "selectedIconPath": "images/tab-home-active.png"
+      },
+      {
+        "pagePath": "pages/community/community",
+        "text": "农情",
+        "iconPath": "images/tab-home.png",
+        "selectedIconPath": "images/tab-home-active.png"
+      },
+      {
+        "pagePath": "pages/profile/profile",
+        "text": "我的",
+        "iconPath": "images/tab-profile.png",
+        "selectedIconPath": "images/tab-profile-active.png"
+      }
+    ]
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents",
+  "requiredPrivateInfos": [
+    "getLocation",
+    "chooseLocation"
+  ],
+  "permission": {
+    "scope.userLocation": {
+      "desc": "用于获取您的位置信息，为您提供精准的田间天气和农事服务"
+    }
+  }
+}

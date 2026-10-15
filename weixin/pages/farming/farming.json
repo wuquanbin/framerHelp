@@ -1,0 +1,9 @@
+{
+  "navigationBarTitleText": "农事服务",
+  "navigationBarBackgroundColor": "#1E4634",
+  "navigationBarTextStyle": "white",
+  "enablePullDownRefresh": true,
+  "usingComponents": {
+    "load-error": "/components/load-error/load-error"
+  }
+}

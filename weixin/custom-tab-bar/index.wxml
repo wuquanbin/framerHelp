@@ -1,0 +1,66 @@
+<view class="tab-bar">
+  <view class="tab-bar-border"></view>
+  <view class="tab-list">
+    <!-- 首页 - 太阳+云 -->
+    <view class="tab-item" data-path="{{list[0].pagePath}}" data-index="0" bindtap="switchTab">
+      <view class="tab-custom-icon {{selected === 0 ? 'icon-active' : ''}}">
+        <view class="icon-home">
+          <view class="sun-body"></view>
+          <view class="sun-ray sun-ray-1"></view>
+          <view class="sun-ray sun-ray-2"></view>
+          <view class="sun-ray sun-ray-3"></view>
+          <view class="cloud-body"></view>
+          <view class="cloud-bump"></view>
+        </view>
+      </view>
+      <text class="tab-text {{selected === 0 ? 'tab-active' : ''}}">{{list[0].text}}</text>
+    </view>
+
+    <!-- 农事 - 叶子 -->
+    <view class="tab-item" data-path="{{list[1].pagePath}}" data-index="1" bindtap="switchTab">
+      <view class="tab-custom-icon {{selected === 1 ? 'icon-active' : ''}}">
+        <view class="icon-farming">
+          <view class="leaf-body"></view>
+          <view class="leaf-stem"></view>
+        </view>
+      </view>
+      <text class="tab-text {{selected === 1 ? 'tab-active' : ''}}">{{list[1].text}}</text>
+    </view>
+
+    <!-- AI 中间凸起按钮 -->
+    <view class="tab-ai-wrapper" data-path="{{list[2].pagePath}}" data-ai="true" bindtap="switchTab">
+      <view class="tab-ai-btn">
+        <view class="tab-ai-mountain">
+          <view class="mountain-bg"></view>
+          <view class="mountain-fg"></view>
+          <text class="tab-ai-text">AI</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 农情 - 人群气泡 -->
+    <view class="tab-item" data-path="{{list[3].pagePath}}" data-index="3" bindtap="switchTab">
+      <view class="tab-custom-icon {{selected === 3 ? 'icon-active' : ''}}">
+        <view class="icon-community">
+          <view class="community-bubble"></view>
+          <view class="community-person community-person-l"></view>
+          <view class="community-person community-person-r"></view>
+        </view>
+      </view>
+      <text class="tab-text {{selected === 3 ? 'tab-active' : ''}}">{{list[3].text}}</text>
+    </view>
+
+    <!-- 我的 - 人物剪影 -->
+    <view class="tab-item" data-path="{{list[4].pagePath}}" data-index="4" bindtap="switchTab">
+      <view class="tab-custom-icon {{selected === 4 ? 'icon-active' : ''}}">
+        <view class="icon-profile">
+          <view class="profile-head"></view>
+          <view class="profile-body"></view>
+        </view>
+        <!-- 管理员回复未读角标，超过 99 显示 99+ -->
+        <view class="tab-badge" wx:if="{{unreadCount > 0}}">{{unreadCount > 99 ? '99+' : unreadCount}}</view>
+      </view>
+      <text class="tab-text {{selected === 4 ? 'tab-active' : ''}}">{{list[4].text}}</text>
+    </view>
+  </view>
+</view>

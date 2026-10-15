@@ -1,0 +1,432 @@
+/* 农情上报 · 田园晨野 */
+/* 配色走 app.wxss 的 CSS 变量 */
+
+.container {
+  padding-bottom: 220rpx; /* 给 FAB + tab bar 留足空间，最后一张卡不被遮 */
+  background: var(--paper);
+  min-height: 100vh;
+}
+
+/* ============ 顶部筛选 ============ */
+.filter-bar {
+  background: rgba(253, 252, 248, 0.92);
+  backdrop-filter: blur(20px);
+  padding: 20rpx 24rpx;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  box-shadow: 0 1rpx 3rpx rgba(0, 0, 0, 0.04), 0 4rpx 16rpx rgba(0, 0, 0, 0.06);
+}
+
+.filter-tabs {
+  display: flex;
+  gap: 16rpx;
+  overflow-x: auto;
+}
+
+.filter-tab {
+  flex-shrink: 0;
+  padding: 12rpx 28rpx;
+  border-radius: 32rpx;
+  font-size: 26rpx;
+  color: var(--ink-2);
+  background: var(--seg-bg);
+  font-weight: 600;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.filter-tab.filter-tab-hover {
+  background: var(--g-tint);
+}
+
+.filter-tab.active {
+  background: var(--g600);
+  color: #fff;
+  box-shadow: 0 4rpx 12rpx rgba(47, 107, 66, 0.28);
+}
+
+/* ============ 上报列表 ============ */
+.report-list {
+  padding: 24rpx 24rpx 0;
+}
+
+.report-card {
+  background: var(--card);
+  border: 1rpx solid var(--card-bd);
+  border-radius: 24rpx;
+  padding: 28rpx 28rpx 24rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 1rpx 2rpx rgba(60, 52, 30, 0.04), 0 6rpx 18rpx rgba(60, 52, 30, 0.05);
+  transition: transform 0.15s ease;
+}
+
+.report-card.card-hover {
+  transform: scale(0.985);
+  background: #FAF8F1;
+}
+
+.report-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.avatar {
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: 50%;
+  margin-right: 16rpx;
+  background: var(--g-tint);
+  border: 2rpx solid rgba(47, 107, 66, 0.12);
+}
+
+.header-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.nickname {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: var(--ink);
+  display: block;
+  margin-bottom: 2rpx;
+}
+
+.village {
+  font-size: 24rpx;
+  color: var(--ink-3);
+}
+
+/* 头部右侧：类型标签 + 时间（右对齐纵排，替代原底部独立时间行） */
+.header-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8rpx;
+  flex-shrink: 0;
+  margin-left: 16rpx;
+}
+
+.header-time {
+  font-size: 22rpx;
+  color: var(--ink-3);
+}
+
+/* 类型标签：iOS 系统色归一到田园晨野语义色板
+   病虫害=陶红（威胁）/ 灾损=稻金（警示）/ 长势=品牌绿（向好）/ 求助=青蓝（冷静求援） */
+.type-tag {
+  font-size: 22rpx;
+  padding: 6rpx 16rpx;
+  border-radius: 20rpx;
+  color: #fff;
+  font-weight: 600;
+  letter-spacing: 1rpx;
+  flex-shrink: 0;
+}
+
+.type-pest { background: var(--clay); }
+.type-disaster { background: var(--gold-deep); }
+.type-growth { background: var(--g600); }
+.type-help { background: #3E6E8F; }
+.type-other { background: #8E8C7E; }
+
+.report-title {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.4;
+  margin-bottom: 8rpx;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  word-break: break-word;
+}
+
+.report-desc {
+  font-size: 26rpx;
+  color: var(--ink-2);
+  line-height: 1.6;
+  margin-bottom: 18rpx;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  word-break: break-word;
+}
+
+/* 列表页图片降为 176rpx 方块：列表看概貌，细节留给详情页 */
+.report-images {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+  margin-bottom: 18rpx;
+}
+
+.report-img {
+  width: 176rpx;
+  height: 176rpx;
+  border-radius: 16rpx;
+  background: #EFEADA;
+  border: 1rpx solid var(--hairline);
+}
+
+.report-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12rpx;
+}
+
+.footer-left {
+  display: flex;
+  gap: 10rpx;
+  min-width: 0;
+}
+
+.crop-tag, .stage-tag {
+  font-size: 22rpx;
+  padding: 4rpx 14rpx;
+  border-radius: 20rpx;
+  font-weight: 600;
+}
+
+.crop-tag {
+  background: var(--g-tint);
+  color: var(--g600);
+}
+
+.stage-tag {
+  background: var(--gold-tint);
+  color: var(--gold-deep);
+}
+
+.footer-right {
+  display: flex;
+  gap: 10rpx;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.status-badge {
+  font-size: 22rpx;
+  padding: 4rpx 14rpx;
+  border-radius: 20rpx;
+  font-weight: 600;
+}
+
+.status-pending { background: var(--gold-tint); color: var(--gold-deep); }
+.status-processing { background: rgba(62, 110, 143, 0.12); color: #3E6E8F; }
+.status-resolved { background: var(--g-tint); color: var(--g600); }
+.status-closed { background: rgba(107, 111, 99, 0.10); color: var(--ink-3); }
+
+.urgency-badge {
+  font-size: 22rpx;
+  padding: 4rpx 14rpx;
+  border-radius: 20rpx;
+  background: var(--clay-tint);
+  color: var(--clay);
+  font-weight: 600;
+}
+
+/* ============ 骨架屏（首次加载） ============ */
+.sk-list {
+  padding: 24rpx 24rpx 0;
+}
+
+.sk-card {
+  background: var(--card);
+  border: 1rpx solid var(--card-bd);
+  border-radius: 24rpx;
+  padding: 28rpx;
+  margin-bottom: 20rpx;
+}
+
+.sk-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 24rpx;
+}
+
+.sk-avatar {
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: 50%;
+  margin-right: 16rpx;
+}
+
+.sk-col {
+  flex: 1;
+}
+
+.sk-bone {
+  background: linear-gradient(90deg, #EFEADA 25%, #F6F2E6 45%, #EFEADA 65%);
+  background-size: 400% 100%;
+  animation: sk-shimmer 1.3s ease infinite;
+}
+
+.sk-line {
+  height: 26rpx;
+  border-radius: 8rpx;
+  margin-bottom: 14rpx;
+}
+
+.sk-col .sk-line:last-child {
+  margin-bottom: 0;
+}
+
+.w90 { width: 90%; }
+.w70 { width: 70%; }
+.w65 { width: 65%; }
+.w40 { width: 40%; }
+.w25 { width: 25%; }
+
+.sk-img {
+  width: 176rpx;
+  height: 176rpx;
+  border-radius: 16rpx;
+  margin-top: 6rpx;
+}
+
+@keyframes sk-shimmer {
+  0% { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
+}
+
+/* ============ 空状态：田园小景（纯 CSS 绘制，零素材） ============ */
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 110rpx 80rpx 0;
+}
+
+.empty-scene {
+  position: relative;
+  width: 240rpx;
+  height: 200rpx;
+  margin-bottom: 36rpx;
+  overflow: hidden;
+  border-radius: 32rpx;
+  background: linear-gradient(180deg, #FDFCF8 0%, #F1EDDD 100%);
+  border: 1rpx solid var(--card-bd);
+}
+
+/* 太阳（稻金） */
+.empty-sun {
+  position: absolute;
+  top: 26rpx;
+  right: 36rpx;
+  width: 56rpx;
+  height: 56rpx;
+  border-radius: 50%;
+  background: rgba(201, 162, 39, 0.55);
+}
+
+/* 两层山丘（品牌绿深浅） */
+.empty-hill {
+  position: absolute;
+  border-radius: 50%;
+}
+
+.empty-hill-back {
+  width: 260rpx;
+  height: 260rpx;
+  background: rgba(47, 107, 66, 0.16);
+  top: 108rpx;
+  left: -120rpx;
+}
+
+.empty-hill-front {
+  width: 300rpx;
+  height: 300rpx;
+  background: rgba(47, 107, 66, 0.30);
+  top: 128rpx;
+  right: -140rpx;
+}
+
+.empty-sprout {
+  position: absolute;
+  bottom: 26rpx;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 56rpx;
+  line-height: 1;
+}
+
+.empty-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 12rpx;
+}
+
+.empty-sub {
+  font-size: 26rpx;
+  color: var(--ink-3);
+  line-height: 1.6;
+  text-align: center;
+  margin-bottom: 40rpx;
+}
+
+/* 空态主行动按钮：把"上报"从右下角带到眼前 */
+.empty-cta {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  background: linear-gradient(160deg, #2F6B42, #3D7A50);
+  color: #fff;
+  font-size: 30rpx;
+  font-weight: 600;
+  padding: 22rpx 64rpx;
+  border-radius: 999rpx;
+  letter-spacing: 2rpx;
+  box-shadow: 0 6rpx 18rpx rgba(47, 107, 66, 0.3);
+  transition: opacity 0.15s ease;
+}
+
+.empty-cta.empty-cta-hover {
+  opacity: 0.85;
+}
+
+.empty-cta-plus {
+  font-size: 36rpx;
+  font-weight: 300;
+  line-height: 1;
+}
+
+/* ============ 上报 FAB：扩展胶囊，动作可读 ============ */
+.fab-btn {
+  position: fixed;
+  right: 32rpx;
+  bottom: 200rpx;
+  height: 92rpx;
+  padding: 0 36rpx;
+  border-radius: 999rpx;
+  background: linear-gradient(160deg, #2F6B42, #3D7A50);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  box-shadow: 0 6rpx 20rpx rgba(47, 107, 66, 0.35);
+  z-index: 100;
+  transition: transform 0.2s ease;
+}
+
+.fab-btn.fab-hover,
+.fab-btn:active {
+  transform: scale(0.94);
+}
+
+.fab-plus {
+  font-size: 40rpx;
+  line-height: 1;
+  font-weight: 300;
+}
+
+.fab-text {
+  font-size: 28rpx;
+  font-weight: 600;
+  letter-spacing: 2rpx;
+}

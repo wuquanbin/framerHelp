@@ -1,0 +1,88 @@
+<view class="page">
+
+  <!-- iOS 大标题 -->
+  <view class="large-title-wrap">
+    <text class="large-title">我的回复</text>
+    <text class="large-sub" wx:if="{{isLoggedIn && replies.length > 0}}">共 {{replies.length}} 条回复记录</text>
+  </view>
+
+  <!-- 未登录 -->
+  <view class="state-block" wx:if="{{!isLoggedIn}}">
+    <view class="state-icon">
+      <text class="state-glyph">💬</text>
+    </view>
+    <text class="state-title">登录后查看回复</text>
+    <text class="state-sub">管理员对反馈和上报的回复</text>
+    <text class="state-sub">会保存在这里</text>
+    <view class="ios-btn" hover-class="ios-btn-hover" bindtap="onWechatLogin">登录</view>
+  </view>
+
+  <!-- 加载失败：必须和「暂无回复」分开 —— 否则用户会以为管理员根本没回他 -->
+  <load-error wx:elif="{{loadError}}" msg="{{loadErrorMsg}}" bind:retry="onRetryLoad" />
+
+  <!-- 加载中 -->
+  <view class="state-block" wx:elif="{{loading && replies.length === 0}}">
+    <view class="ios-spinner"></view>
+    <text class="state-sub">正在加载…</text>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="state-block" wx:elif="{{replies.length === 0}}">
+    <view class="state-icon">
+      <text class="state-glyph">📭</text>
+    </view>
+    <text class="state-title">暂无回复记录</text>
+    <text class="state-sub">管理员回复您的反馈或上报后</text>
+    <text class="state-sub">会显示在这里</text>
+  </view>
+
+  <!-- 回复列表（Inset Grouped 卡片） -->
+  <view class="list" wx:else>
+    <view class="card" wx:for="{{replies}}" wx:key="index">
+
+      <!-- 卡片头部：彩色图标 + 来源 + 时间 -->
+      <view class="card-head">
+        <view class="tile tile-{{item.source}}">
+          <text class="tile-glyph">{{item.source === 'feedback' ? '💬' : '🌾'}}</text>
+        </view>
+        <text class="card-source">{{item.source === 'feedback' ? '意见反馈' : '农情上报'}}</text>
+        <text class="card-time">{{item.timeText}}</text>
+      </view>
+
+      <!-- 标题（反馈类型/上报标题） -->
+      <text class="card-title">{{item.titleText}}</text>
+
+      <!-- 工单分层区：我的反馈 + 官方回复 -->
+      <view class="ticket">
+        <!-- 我的反馈（农情上报无原文时不显示此块） -->
+        <view class="ticket-mine" wx:if="{{item.originalContent}}">
+          <view class="ticket-label ticket-label-mine">
+            <text class="label-dot label-dot-mine"></text>
+            <text>我的反馈</text>
+          </view>
+          <text class="ticket-mine-text">{{item.originalContent}}</text>
+        </view>
+        <!-- 官方回复 -->
+        <view class="ticket-reply">
+          <view class="ticket-label ticket-label-admin">
+            <text class="label-dot label-dot-admin"></text>
+            <text>官方回复<text wx:if="{{item.responderName}}"> · {{item.responderName}}</text></text>
+          </view>
+          <text class="ticket-reply-text">{{item.reply}}</text>
+        </view>
+      </view>
+
+      <!-- 农情上报：跳详情（iOS  disclosure 行） -->
+      <view class="card-footer" wx:if="{{item.source === 'farm-report'}}"
+            bindtap="goReportDetail" data-reportid="{{item.reportId}}"
+            hover-class="footer-hover" hover-stay-time="80">
+        <text class="footer-text">查看上报详情</text>
+        <text class="footer-chevron">›</text>
+      </view>
+    </view>
+
+    <text class="list-end">已经到底了</text>
+  </view>
+
+  <view class="safe-bottom"></view>
+</view>

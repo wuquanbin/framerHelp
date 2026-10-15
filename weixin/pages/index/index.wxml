@@ -1,0 +1,157 @@
+<view class="container">
+  <!-- 田间天气 · 首屏卡：左对齐信息层级，今日农事前置 -->
+  <view class="card weather-card {{weatherBgClass}}">
+    <view class="village-picker" wx:if="{{villageNames.length > 0}}">
+      <picker range="{{villageNames}}" value="{{villageIndex}}" bindchange="onVillageChange">
+        <view class="village-selector" hover-class="selector-active">
+          <view class="ic ic-pin-cream ic-sm"></view>
+          <text class="village-selector-text">{{villageNames[villageIndex]}}</text>
+          <text class="village-selector-caret">▾</text>
+        </view>
+      </picker>
+    </view>
+
+    <view class="weather-main {{loading ? 'is-loading' : ''}}">
+      <view class="weather-now">
+        <text class="weather-now-icon">{{currentWeather.icon || '🌤️'}}</text>
+        <view class="weather-now-text">
+          <text class="weather-type">{{currentWeather.weatherType || '加载中'}}</text>
+          <text class="weather-range">{{currentWeather.lowTemperature || '--'}}~{{currentWeather.highTemperature || '--'}}°C</text>
+        </view>
+      </view>
+
+      <view class="weather-temp-row">
+        <text class="weather-temp">{{currentWeather.temperature || '--'}}</text>
+        <view class="weather-temp-side">
+          <text class="weather-temp-unit">°C</text>
+          <text class="weather-feels-label">体感 {{currentWeather.apparentTemperature || '--'}}°C</text>
+        </view>
+      </view>
+
+      <!-- 今日农事：把"今天能不能下地"放在首屏黄金位 -->
+      <view class="hero-advice" wx:if="{{todayAdvice}}">
+        <text class="hero-advice-label">今日农事</text>
+        <text class="hero-advice-text">{{todayAdvice}}</text>
+      </view>
+
+      <!-- 加载失败提示：后端没启动 / 电脑 IP 变了时，给用户一个明确的重试入口，
+           避免页面只剩下"--"和空白让人以为是程序坏了。
+           与其它页面共用同一个组件，错误态的文案和位置才能保持一致。 -->
+      <load-error wx:if="{{loadError}}" msg="{{loadErrorMsg}}" bind:retry="onRetryLoad" />
+
+      <!-- 灾害预警标签 -->
+      <view wx:if="{{warnings.length > 0}}" class="weather-warnings">
+        <view wx:for="{{warnings}}" wx:key="title" class="weather-warning-tag">
+          <view class="ic ic-warn-cream ic-sm"></view>
+          <text class="warning-text">{{item.title}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 农事指数 -->
+  <view class="card" wx:if="{{farmIndex.length > 0}}">
+    <view class="card-title title-with-icon">
+      <view class="ic ic-sprout title-ic"></view>
+      <text>农事指数</text>
+    </view>
+    <view class="farm-index-grid">
+      <view wx:for="{{farmIndex}}" wx:key="name" class="farm-index-item" hover-class="farm-item-hover">
+        <text class="farm-index-icon">{{item.icon || '🌾'}}</text>
+        <text class="farm-index-name">{{item.name}}</text>
+        <text class="farm-index-level farm-level-{{item.level}}">{{item.levelText}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 预报 + 农事建议：以「今天」为时间锚点 -->
+  <view class="card forecast-card">
+    <view class="card-title-row">
+      <view class="card-title title-with-icon">
+        <view class="ic ic-calendar title-ic"></view>
+        <text>预报与农事建议</text>
+      </view>
+      <text class="forecast-count-tag">{{allForecast.length}} 天</text>
+    </view>
+    <view class="forecast-list">
+      <view wx:for="{{displayForecast}}" wx:key="forecastDate" class="forecast-item {{item.isYesterday ? 'forecast-past' : ''}} {{item.weekLabel === '今天' ? 'forecast-today' : ''}}">
+        <view class="forecast-left">
+          <view class="forecast-date-row">
+            <text class="forecast-day">{{item.weekLabel}}</text>
+            <text class="forecast-date">{{item.forecastDate}}</text>
+          </view>
+          <view class="forecast-middle">
+            <text class="forecast-icon">{{item.icon}}</text>
+            <text class="forecast-weather">{{item.weatherType}}</text>
+            <text wx:if="{{item.precipitationProbability}}" class="forecast-rain">{{item.precipitationProbability}}%</text>
+          </view>
+          <view class="forecast-temp">
+            <text class="temp-high">{{item.highTemperature}}°</text>
+            <text class="temp-sep">/</text>
+            <text class="temp-low">{{item.lowTemperature}}°</text>
+          </view>
+        </view>
+        <view class="forecast-advice" wx:if="{{item.farmingAdvice}}">
+          <text class="advice-label">农事</text>
+          <text class="advice-text">{{item.farmingAdvice}}</text>
+        </view>
+      </view>
+    </view>
+    <view class="forecast-more-btn" wx:if="{{allForecast.length > 3}}" bindtap="goToWeatherDetail" hover-class="more-btn-hover">
+      <text class="more-btn-text">{{showAllForecast ? '收起预报' : '展开后 ' + (allForecast.length - 3) + ' 天'}}</text>
+      <view class="more-caret {{showAllForecast ? 'is-open' : ''}}"></view>
+    </view>
+  </view>
+
+  <!-- 灾害预警区域 -->
+  <view class="card warning-card {{warningCardClass}}" wx:if="{{warnings.length > 0}}">
+    <view class="card-title warning-card-title title-with-icon">
+      <view class="ic ic-warn title-ic"></view>
+      <text>灾害预警</text>
+    </view>
+    <view wx:for="{{warnings}}" wx:key="title" class="warning-item">
+      <view class="warning-info">
+        <text class="warning-title">{{item.title}}</text>
+        <text class="warning-desc text-sm text-gray">{{item.description || ''}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 快捷操作：AI 为主推入口（深绿实底），其余浅底 -->
+  <view class="quick-actions">
+    <view class="quick-action-btn" bindtap="goToFarming" hover-class="qa-hover">
+      <view class="quick-icon-wrap quick-green">
+        <view class="ic ic-sprout ic-lg"></view>
+      </view>
+      <text class="quick-action-label">农事建议</text>
+    </view>
+    <view class="quick-action-btn quick-ai" bindtap="goToAI" hover-class="qa-hover">
+      <view class="quick-icon-wrap quick-ai-inner">
+        <view class="ic ic-robot-cream ic-lg"></view>
+      </view>
+      <text class="quick-action-label">AI 问诊</text>
+    </view>
+    <view class="quick-action-btn" bindtap="goToReportDisaster" hover-class="qa-hover">
+      <view class="quick-icon-wrap quick-orange">
+        <view class="ic ic-sos ic-lg"></view>
+      </view>
+      <text class="quick-action-label">上报灾情</text>
+    </view>
+  </view>
+
+  <!-- 方言语音播报占位 -->
+  <view class="card dialect-card">
+    <view class="dialect-header">
+      <view class="dialect-title title-with-icon">
+        <view class="ic ic-speaker title-ic"></view>
+        <text>方言语音播报</text>
+      </view>
+      <text class="dialect-tag">即将推出</text>
+    </view>
+    <text class="dialect-desc text-sm text-gray">用本地话为您播报田间天气和灾害预警，让长辈也能轻松了解天气变化</text>
+    <view class="dialect-btn-placeholder">
+      <view class="ic ic-speaker ic-sm dialect-btn-ic"></view>
+      <text class="dialect-btn-text">开启方言播报</text>
+    </view>
+  </view>
+</view>

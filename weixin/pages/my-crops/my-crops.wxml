@@ -1,0 +1,77 @@
+<view class="page">
+  <!-- 顶部说明 -->
+  <view class="header-section">
+    <view class="header-icon-circle">
+      <view class="ic ic-wheat header-ic"></view>
+    </view>
+    <text class="header-title">选择您种植的作物</text>
+    <text class="header-desc">勾选作物并设置播种日期与种植面积，系统将自动计算"今天该做什么"并推送提醒</text>
+  </view>
+
+  <!-- 已选数量提示 -->
+  <view class="selected-bar" wx:if="{{selectedCount > 0}}">
+    <text class="selected-text">已选择 {{selectedCount}} 种作物</text>
+    <text class="clear-btn" bindtap="clearAll">清空</text>
+  </view>
+
+  <!-- 作物列表 -->
+  <view class="crop-list">
+    <view class="crop-item {{item.selected ? 'selected' : ''}}" wx:for="{{cropList}}" wx:key="cropName">
+      <view class="crop-main" bindtap="toggleCrop" data-name="{{item.cropName}}">
+        <view class="crop-left">
+          <view class="crop-icon-wrap {{item.iconBgClass}}">
+            <text class="crop-icon">{{item.cropIcon}}</text>
+          </view>
+          <view class="crop-info">
+            <text class="crop-name">{{item.cropName}}</text>
+            <text class="crop-stage">{{item.growthStage}}{{item.myArea ? ' · 我种 ' + item.myArea + ' 亩' : ' · 面积未设置'}}</text>
+          </view>
+        </view>
+        <view class="checkbox {{item.selected ? 'checked' : ''}}">
+          <text class="check-icon" wx:if="{{item.selected}}">✓</text>
+        </view>
+      </view>
+
+      <!-- 选中后显示播种日期与个人种植面积设置 -->
+      <view class="planting-date-section" wx:if="{{item.selected}}">
+        <view class="planting-date-label">
+          <text class="planting-date-icon">📅</text>
+          <text>播种/移栽日期</text>
+        </view>
+        <picker mode="date" value="{{item.plantingDate}}" start="2020-01-01" end="2030-12-31" bindchange="onDateChange" data-index="{{index}}">
+          <view class="date-picker {{item.plantingDate ? 'date-set' : ''}}">
+            <text wx:if="{{item.plantingDate}}">{{item.plantingDate}}</text>
+            <text wx:else class="date-placeholder">点击选择日期</text>
+            <text class="date-arrow">›</text>
+          </view>
+        </picker>
+        <text class="planting-date-hint" wx:if="{{item.plantingDate}}">已种植 {{item.daysPlanted}} 天</text>
+
+        <view class="area-row">
+          <view class="planting-date-label">
+            <text class="planting-date-icon">📐</text>
+            <text>种植面积（亩）</text>
+          </view>
+          <input class="area-input" type="digit" value="{{item.myArea}}"
+                 placeholder="填写您自己的种植面积" placeholder-class="area-placeholder"
+                 bindinput="onAreaInput" data-index="{{index}}" />
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 加载失败：主数据拿不到时给出重试入口 -->
+  <load-error wx:if="{{loadError}}" msg="{{loadErrorMsg}}" bind:retry="onRetryLoad" />
+
+  <view class="empty-state" wx:if="{{!cropList.length && !loading && !loadError}}">
+    <text class="empty-icon">🌿</text>
+    <text class="empty-text">暂无作物档案</text>
+  </view>
+
+  <!-- 底部保存按钮 -->
+  <view class="bottom-bar">
+    <button class="save-btn" bindtap="saveCrops" loading="{{saving}}">保存设置</button>
+  </view>
+
+  <view class="safe-bottom"></view>
+</view>

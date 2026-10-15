@@ -1,0 +1,57 @@
+<view class="container">
+  <view class="detail-card" wx:if="{{report}}">
+    <view class="report-header">
+      <image class="avatar" src="{{report.displayAvatar || defaultMaleAvatar}}" mode="aspectFill" data-scope="report" binderror="onAvatarError"></image>
+      <view class="header-info">
+        <text class="nickname">{{report.nickname || '农户'}}</text>
+        <text class="village">{{report.villageName}} · {{report.createdAt}}</text>
+      </view>
+      <view class="type-tag type-{{report.reportType}}">{{typeLabels[report.reportType]}}</view>
+    </view>
+
+    <view class="detail-title">{{report.title}}</view>
+    <view class="detail-desc">{{report.description}}</view>
+
+    <view class="detail-images" wx:if="{{report.parsedImages}}">
+      <image class="detail-img" wx:for="{{report.parsedImages}}" wx:for-item="img" wx:key="*this" src="{{img}}" mode="aspectFill" bindtap="previewImage" data-url="{{img}}"></image>
+    </view>
+
+    <view class="detail-meta">
+      <view class="meta-item" wx:if="{{report.cropName}}">
+        <text class="meta-label">关联作物</text>
+        <text class="meta-value">{{report.cropName}}</text>
+      </view>
+      <view class="meta-item" wx:if="{{report.growthStage}}">
+        <text class="meta-label">生长阶段</text>
+        <text class="meta-value">{{report.growthStage}}</text>
+      </view>
+      <view class="meta-item">
+        <text class="meta-label">处理状态</text>
+        <view class="status-badge status-{{report.status}}">{{statusLabels[report.status]}}</view>
+      </view>
+      <view class="meta-item" wx:if="{{report.urgency === 'high'}}">
+        <text class="meta-label">紧急程度</text>
+        <view class="urgency-badge">紧急</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 帮扶响应列表 -->
+  <view class="response-section">
+    <view class="section-title">帮扶响应 ({{responses.length}})</view>
+    <view class="response-card" wx:for="{{responses}}" wx:key="id">
+      <view class="response-header">
+        <image class="response-avatar" src="{{item.displayAvatar || defaultMaleAvatar}}" mode="aspectFill" data-scope="response" data-index="{{index}}" binderror="onAvatarError"></image>
+        <view class="response-info">
+          <text class="response-name">{{item.responderName || '帮扶人员'}}</text>
+          <text class="response-time">{{item.createdAt}}</text>
+        </view>
+        <view class="response-type-tag type-{{item.responseType}}">{{responseTypeLabels[item.responseType]}}</view>
+      </view>
+      <view class="response-content">{{item.content}}</view>
+    </view>
+    <view class="empty-response" wx:if="{{responses.length === 0}}">
+      <text>暂无帮扶响应</text>
+    </view>
+  </view>
+</view>

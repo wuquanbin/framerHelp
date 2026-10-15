@@ -1,0 +1,280 @@
+<view class="page">
+  <!-- 大标题 · 田园晨野 -->
+  <view class="large-title-header">
+    <text class="large-title">农事</text>
+    <text class="large-subtitle">{{villageName}} · 农业生产指南</text>
+  </view>
+
+  <!-- 分段控制：米色轨道 + 深绿选中，横向可滑。
+       顺序即闭环：「今日任务」提醒 → 打卡执行 → 「农事档案」留下记录，
+       两组相关的入口挨在一起，后面才是查阅类的建议/档案/灾害/提醒。
+
+       为什么改成横滑：六个四字 Tab 均分后每格只有 112rpx，而「今日任务」四个字
+       就要 92rpx，余量不够字体自身的字距，真机上会被压成两行。
+       横滑之后字号回到 25rpx，四字全称保住（用户是农户，可读性优先于视觉洁癖），
+       尾部半截露出即为「还能往右滑」的提示。
+       scroll-into-view 让切换 Tab 时自动把当前项滚进可视区。 -->
+  <view class="segmented-wrapper">
+    <scroll-view
+      class="segmented-scroll"
+      scroll-x
+      scroll-into-view="{{activeTabId}}"
+      scroll-with-animation
+      show-scrollbar="{{false}}"
+      enhanced
+    >
+      <view class="segmented-control">
+        <view id="tab-4" class="segmented-item {{activeTab === 4 ? 'active' : ''}}" bindtap="switchTab" data-tab="4">
+          <text>今日任务</text>
+        </view>
+        <view id="tab-5" class="segmented-item {{activeTab === 5 ? 'active' : ''}}" bindtap="switchTab" data-tab="5">
+          <text>农事档案</text>
+        </view>
+        <view id="tab-0" class="segmented-item {{activeTab === 0 ? 'active' : ''}}" bindtap="switchTab" data-tab="0">
+          <text>农事建议</text>
+        </view>
+        <view id="tab-1" class="segmented-item {{activeTab === 1 ? 'active' : ''}}" bindtap="switchTab" data-tab="1">
+          <text>作物档案</text>
+        </view>
+        <view id="tab-2" class="segmented-item {{activeTab === 2 ? 'active' : ''}}" bindtap="switchTab" data-tab="2">
+          <text>灾害记录</text>
+        </view>
+        <view id="tab-3" class="segmented-item {{activeTab === 3 ? 'active' : ''}}" bindtap="switchTab" data-tab="3">
+          <text>作物提醒</text>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- 统一的加载失败提示：任何一个 tab 拉数据失败都会落到这里 -->
+  <load-error wx:if="{{loadError}}" msg="{{loadErrorMsg}}" bind:retry="onRetryLoad" />
+
+  <!-- Tab 1: Farm Advices -->
+  <view class="tab-content" wx:if="{{activeTab === 0}}">
+    <view class="section-label">今日建议</view>
+    <view class="advice-card" wx:for="{{farmAdvices}}" wx:key="id">
+      <view class="advice-card-left">
+        <view class="advice-icon-wrap {{item.priorityClass}}">
+          <view class="ic {{item.priorityClass === 'priority-high' ? 'ic-bolt' : item.priorityClass === 'priority-medium' ? 'ic-wind' : 'ic-sprout'}}"></view>
+        </view>
+      </view>
+      <view class="advice-card-body">
+        <view class="advice-card-header">
+          <text class="advice-title">{{item.title}}</text>
+          <text class="advice-pri-tag {{item.priorityClass}}">{{item.priorityText}}</text>
+        </view>
+        <text class="advice-summary">{{item.summary}}</text>
+        <view class="advice-card-footer">
+          <text class="advice-time">{{item.timeAgo}}</text>
+          <view class="chevron"></view>
+        </view>
+      </view>
+    </view>
+    <view class="empty-state" wx:if="{{!farmAdvices.length && !adviceLoading}}">
+      <text class="empty-icon">🌱</text>
+      <text class="empty-text">暂无农事建议</text>
+    </view>
+  </view>
+
+  <!-- Tab 2: Crop Profiles -->
+  <view class="tab-content" wx:if="{{activeTab === 1}}">
+    <view class="section-label">主要作物</view>
+    <view class="crop-grid">
+      <view class="crop-card" wx:for="{{cropProfiles}}" wx:key="id" bindtap="openCropDetail" data-id="{{item.id}}" bindtouchstart="onCropTouchStart" bindtouchend="onCropTouchEnd" data-index="{{index}}">
+        <view class="crop-image-wrap {{item.cropGradient}} {{item.touched ? 'zoomed' : ''}}">
+          <block wx:if="{{!item.imageLoadFail}}">
+            <image class="crop-image-3d" src="{{item.imageUrl || defaultCropImage}}" mode="aspectFill" lazy-load="true" binderror="onCropImageError" data-index="{{index}}"></image>
+          </block>
+          <text wx:if="{{item.imageLoadFail}}" class="crop-emoji-fallback">{{item.imageLoadFail}}</text>
+          <view class="crop-glass-effect"></view>
+          <view class="crop-risk-badge {{item.riskClass}}">{{item.riskLevelText}}</view>
+        </view>
+        <view class="crop-card-body">
+          <text class="crop-name">{{item.cropName}}</text>
+          <text class="crop-stage">{{item.growthStageText}}{{item.myArea ? ' · 我种 ' + item.myArea + ' 亩' : ' · 面积未设置'}}</text>
+        </view>
+      </view>
+    </view>
+    <view class="empty-state" wx:if="{{!cropProfiles.length && !cropLoading}}">
+      <text class="empty-icon">🌿</text>
+      <text class="empty-text">暂无作物档案</text>
+    </view>
+  </view>
+
+  <!-- Tab 3: Disaster Records -->
+  <view class="tab-content" wx:if="{{activeTab === 2}}">
+    <view class="section-label">历史灾害</view>
+    <view class="disaster-card" wx:for="{{disasterRecords}}" wx:key="id">
+      <view class="disaster-severity-bar {{item.severityClass}}"></view>
+      <view class="disaster-card-body">
+        <view class="disaster-card-header">
+          <text class="disaster-title">{{item.disasterName || item.title}}</text>
+          <view class="severity-tag {{item.severityClass}}">{{item.severityText}}</view>
+        </view>
+        <view class="disaster-location-row">
+          <view class="ic ic-pin ic-sm disaster-pin"></view>
+          <text class="disaster-location">{{item.affectedArea || item.description}}</text>
+        </view>
+        <text class="disaster-time">{{item.timeAgo}}</text>
+      </view>
+    </view>
+    <view class="empty-state" wx:if="{{!disasterRecords.length && !disasterLoading}}">
+      <text class="empty-icon">📋</text>
+      <text class="empty-text">暂无灾害记录</text>
+    </view>
+  </view>
+
+  <!-- Tab 4: Crop Reminders (作物生长引擎生成的针对性提醒) -->
+  <view class="tab-content" wx:if="{{activeTab === 3}}">
+    <view class="section-label">针对本村作物的今日提醒</view>
+    <view class="reminder-card" wx:for="{{cropReminders}}" wx:key="cropName">
+      <view class="reminder-card-left">
+        <view class="reminder-icon-wrap {{item.iconBgClass}}">
+          <text class="reminder-icon">{{item.cropIcon}}</text>
+        </view>
+      </view>
+      <view class="reminder-card-body">
+        <view class="reminder-card-header">
+          <text class="reminder-crop-name">{{item.cropName}}</text>
+          <view class="reminder-stage-tag">{{item.growthStage}}</view>
+          <view class="reminder-urgency-tag {{item.urgencyClass}}">{{item.urgency}}</view>
+        </view>
+        <view class="reminder-weather-impact">
+          <text class="reminder-impact-label">天气影响</text>
+          <text class="reminder-impact-text">{{item.weatherImpact}}</text>
+        </view>
+        <view class="reminder-suggestion">
+          <text class="reminder-suggestion-label">农事建议</text>
+          <text class="reminder-suggestion-text">{{item.suggestion}}</text>
+        </view>
+      </view>
+    </view>
+    <view class="empty-state" wx:if="{{!cropReminders.length && !reminderLoading}}">
+      <text class="empty-icon">🌾</text>
+      <text class="empty-text">暂无作物提醒</text>
+    </view>
+  </view>
+
+  <!-- Tab 5: 今日任务（根据播种日期自动计算） -->
+  <view class="tab-content" wx:if="{{activeTab === 4}}">
+    <view class="section-label">今日农事任务</view>
+
+    <!-- 未登录提示 -->
+    <view class="task-guide-card" wx:if="{{!isLoggedIn}}">
+      <view class="ic ic-sprout ic-lg task-guide-ic"></view>
+      <text class="task-guide-title">登录后查看今日任务</text>
+      <text class="task-guide-desc">登录并设置作物播种日期，系统将自动计算每天该做什么</text>
+    </view>
+
+    <!-- 已登录但无任务 -->
+    <view class="task-guide-card" wx:if="{{isLoggedIn && !todayTasks.length && !todayLoading}}">
+      <view class="ic ic-calendar ic-lg task-guide-ic"></view>
+      <text class="task-guide-title">还没有设置播种日期</text>
+      <text class="task-guide-desc">前往「我的」→「我的作物」，勾选作物并设置播种日期，即可自动生成每日农事任务</text>
+      <view class="task-guide-btn" bindtap="goToMyCrops">去设置</view>
+    </view>
+
+    <!-- 任务列表 -->
+    <view class="task-card {{item.priorityClass}} {{item.done ? 'task-done' : ''}}" wx:for="{{todayTasks}}" wx:key="index">
+      <view class="task-card-left">
+        <view class="task-priority-badge {{item.priorityClass}}">
+          <text class="task-priority-text">{{item.priorityText}}</text>
+        </view>
+      </view>
+      <view class="task-card-body">
+        <view class="task-card-header">
+          <text class="task-crop-name">{{item.cropName}}</text>
+          <text class="task-day-badge">种植第{{item.currentDay}}天</text>
+        </view>
+        <text class="task-name">{{item.taskName}}</text>
+        <text class="task-desc">{{item.description}}</text>
+        <text class="task-done-time" wx:if="{{item.done && item.completedAt}}">已于 {{item.completedAt}} 完成</text>
+      </view>
+      <view class="task-check-btn {{item.done ? 'checked' : ''}}" catchtap="toggleTaskDone" data-index="{{index}}">
+        <text>{{item.done ? '✓ 已完成' : '打卡'}}</text>
+      </view>
+    </view>
+
+    <view class="empty-state" wx:if="{{!todayTasks.length && todayLoading && isLoggedIn}}">
+      <text class="empty-icon">⏳</text>
+      <text class="empty-text">加载中...</text>
+    </view>
+  </view>
+
+  <!-- Tab 6: 农事档案（闭环的「记录」环节） -->
+  <view class="tab-content" wx:if="{{activeTab === 5}}">
+    <!-- 未登录：先说明白为什么是空的，而不是丢一个空白页 -->
+    <view class="task-guide-card" wx:if="{{!isLoggedIn}}">
+      <view class="ic ic-clipboard ic-lg task-guide-ic"></view>
+      <text class="task-guide-title">登录后查看农事档案</text>
+      <text class="task-guide-desc">每一次打卡都会记进档案，方便回看这段时间的农事完成情况</text>
+    </view>
+
+    <block wx:if="{{isLoggedIn}}">
+      <!-- 总览：完成率是大数字，其余三项做小统计 -->
+      <view class="archive-hero" wx:if="{{archive}}">
+        <view class="archive-hero-main">
+          <text class="archive-rate">{{archive.summary.rateText}}</text>
+          <text class="archive-rate-label">近 {{archive.days}} 天完成率</text>
+        </view>
+        <view class="archive-hero-stats">
+          <view class="archive-stat">
+            <text class="archive-stat-num">{{archive.summary.completed}}</text>
+            <text class="archive-stat-label">已完成</text>
+          </view>
+          <view class="archive-stat">
+            <text class="archive-stat-num">{{archive.summary.pending}}</text>
+            <text class="archive-stat-label">未完成</text>
+          </view>
+          <view class="archive-stat">
+            <text class="archive-stat-num">{{archive.summary.streak}}</text>
+            <text class="archive-stat-label">连续完成</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 打卡日历：一格一天，颜色深浅表示当天完成度 -->
+      <view class="section-label">打卡日历</view>
+      <view class="archive-cal" wx:if="{{archive.calendar.length}}">
+        <view class="archive-cal-cell {{item.heat}}" wx:for="{{archive.calendar}}" wx:key="date"></view>
+      </view>
+      <view class="archive-legend">
+        <view class="archive-legend-item"><view class="archive-cal-cell none legend"></view><text>无记录</text></view>
+        <view class="archive-legend-item"><view class="archive-cal-cell zero legend"></view><text>未打卡</text></view>
+        <view class="archive-legend-item"><view class="archive-cal-cell part legend"></view><text>部分完成</text></view>
+        <view class="archive-legend-item"><view class="archive-cal-cell full legend"></view><text>全部完成</text></view>
+      </view>
+
+      <view class="section-label">执行明细</view>
+      <view class="archive-day" wx:for="{{archive.groups}}" wx:key="date">
+        <view class="archive-day-head">
+          <text class="archive-day-date">{{item.dateText}}</text>
+          <text class="archive-day-week">{{item.weekday}}</text>
+          <text class="archive-day-rate">{{item.completed}}/{{item.total}}</text>
+        </view>
+        <view class="archive-item {{it.done ? 'done' : ''}}" wx:for="{{item.items}}" wx:for-item="it" wx:key="recordId">
+          <view class="archive-item-dot {{it.done ? 'done' : ''}}"></view>
+          <view class="archive-item-body">
+            <text class="archive-item-name">{{it.cropName}} · {{it.taskName}}</text>
+            <text class="archive-item-sub" wx:if="{{it.done && it.completedText}}">{{it.completedText}} 已完成</text>
+            <text class="archive-item-sub" wx:elif="{{it.done}}">已完成</text>
+            <text class="archive-item-sub pending" wx:else>未完成</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 三种「空」要说清楚，不能都显示同一句 -->
+      <view class="empty-state" wx:if="{{!archiveLoading && archive && !archive.groups.length}}">
+        <text class="empty-icon">📒</text>
+        <text class="empty-text">近 {{archive.days}} 天还没有农事记录</text>
+        <text class="empty-sub">先去「今日任务」完成一次打卡</text>
+      </view>
+      <view class="empty-state" wx:if="{{archiveLoading}}">
+        <text class="empty-icon">⏳</text>
+        <text class="empty-text">加载中...</text>
+      </view>
+    </block>
+  </view>
+
+  <view class="bottom-safe"></view>
+</view>

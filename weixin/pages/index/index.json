@@ -1,0 +1,9 @@
+{
+  "navigationBarTitleText": "乡村农业气象帮扶",
+  "navigationBarBackgroundColor": "#1E4634",
+  "navigationBarTextStyle": "white",
+  "enablePullDownRefresh": true,
+  "usingComponents": {
+    "load-error": "/components/load-error/load-error"
+  }
+}

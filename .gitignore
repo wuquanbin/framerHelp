@@ -1,0 +1,101 @@
+# ================ OS / 系统文件 ================
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+.DS_Store
+.AppleDouble
+.LSOverride
+# Word/Office 临时文件（打开 docx/pptx 时产生的 ~$ 开头文件）
+~$*
+
+# ================ IDE / 编辑器 ================
+# IntelliJ IDEA
+.idea/
+*.iws
+*.iml
+*.ipr
+out/
+# Eclipse / STS
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+# VS Code
+.vscode/*
+!.vscode/extensions.json
+# 其他
+*.sw?
+*.swo
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# ================ Java / Maven (Spring Boot) ================
+target/
+build/
+*.class
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+# Maven wrapper jar（子项目 mvnw 使用）
+.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+# ================ Node / 前端 (Vue3) ================
+node_modules/
+dist/
+dist-ssr/
+coverage/
+*.local
+*.tsbuildinfo
+.eslintcache
+__screenshots__/
+*.timestamp-*-*.mjs
+# Vite / Cypress
+/cypress/videos/
+/cypress/screenshots/
+# 各种日志
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# ================ 微信小程序 ================
+# 小程序 npm 构建产物
+miniprogram_npm/
+# 开发者工具编译缓存
+cache/
+.wx-cache/
+miniprogram-dist/
+project.private.config.json
+
+# ================ 大体积归档 / 交付物 ================
+# 压缩包（答辩打包、作业提交、演示视频等；如需入库请单独 git add -f 强制添加）
+*.7z
+*.zip
+
+# ================ 本地工具 / 会话数据 / 敏感配置 ================
+# AI 工具会话数据与临时状态
+.workbuddy/
+.trae/
+.impeccable/
+.git-status.tmp
+# 会话调试笔记（PSREAD.txt 为工具调试输出）
+PSREAD.txt
+# 运行日志（含错误日志）
+*.log.err
+# 本地敏感配置（含真实密钥，不入库；模板见 application.properties.example）
+application.properties

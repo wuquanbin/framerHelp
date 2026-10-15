@@ -1,0 +1,294 @@
+/* ===== 我的回复 · 田园晨野 ===== */
+page {
+  background: var(--paper);
+  font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', 'Microsoft YaHei', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.page {
+  min-height: 100vh;
+  padding-bottom: 40rpx;
+  box-sizing: border-box;
+}
+
+/* ===== 大标题 ===== */
+.large-title-wrap {
+  padding: 24rpx 44rpx 20rpx;
+}
+
+.large-title {
+  display: block;
+  font-size: 64rpx;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -1.5rpx;
+  line-height: 1.2;
+}
+
+.large-sub {
+  display: block;
+  margin-top: 10rpx;
+  font-size: 26rpx;
+  color: var(--ink-3);
+  letter-spacing: 0.5rpx;
+}
+
+/* ===== 卡片列表 ===== */
+.list {
+  padding: 12rpx 32rpx 0;
+  display: flex;
+  flex-direction: column;
+  gap: 24rpx;
+}
+
+.card {
+  background: var(--card);
+  border: 1rpx solid var(--card-bd);
+  border-radius: 28rpx;
+  padding: 32rpx;
+  box-shadow: 0 1rpx 2rpx rgba(60, 52, 30, 0.04), 0 6rpx 18rpx rgba(60, 52, 30, 0.05);
+}
+
+/* 卡片头部：彩色图标 + 来源 + 时间 */
+.card-head {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.tile {
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: 20rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 20rpx;
+  flex-shrink: 0;
+}
+
+/* 意见反馈 → 品牌绿；农情上报 → 稻谷金（iOS 蓝已归一） */
+.tile-feedback {
+  background: linear-gradient(160deg, #3D7A50 0%, #2F6B42 100%);
+}
+
+.tile-farm-report {
+  background: linear-gradient(160deg, #C9A227 0%, #A07E14 100%);
+}
+
+.tile-glyph {
+  font-size: 38rpx;
+  line-height: 1;
+}
+
+.card-source {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.card-time {
+  margin-left: auto;
+  font-size: 26rpx;
+  color: var(--ink-3);
+  flex-shrink: 0;
+}
+
+/* 标题（最多两行，超出省略） */
+.card-title {
+  display: -webkit-box;
+  font-size: 32rpx;
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.4;
+  margin-bottom: 24rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  word-break: break-word;
+}
+
+/* ===== 工单分层：我的反馈 / 官方回复 ===== */
+.ticket {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+/* 板块小标题（圆点 + 文字） */
+.ticket-label {
+  display: flex;
+  align-items: center;
+  font-size: 24rpx;
+  font-weight: 600;
+  margin-bottom: 12rpx;
+  line-height: 1;
+}
+
+.label-dot {
+  width: 12rpx;
+  height: 12rpx;
+  border-radius: 50%;
+  margin-right: 10rpx;
+  flex-shrink: 0;
+}
+
+/* 我的反馈：米白板块 */
+.ticket-mine {
+  background: var(--paper);
+  border-radius: 16rpx;
+  padding: 20rpx 24rpx;
+}
+
+.ticket-label-mine {
+  color: var(--ink-3);
+}
+
+.label-dot-mine {
+  background: #B5B0A0;
+}
+
+.ticket-mine-text {
+  display: block;
+  font-size: 28rpx;
+  color: var(--ink-2);
+  line-height: 1.55;
+  word-break: break-word;
+}
+
+/* 官方回复：浅绿底 + 左侧品牌绿强调条（iOS 绿归一为品牌绿） */
+.ticket-reply {
+  background: var(--g-tint);
+  border-left: 6rpx solid var(--g600);
+  border-radius: 16rpx;
+  padding: 20rpx 24rpx;
+}
+
+.ticket-label-admin {
+  color: var(--g600);
+}
+
+.label-dot-admin {
+  background: var(--g600);
+}
+
+.ticket-reply-text {
+  display: block;
+  font-size: 30rpx;
+  color: var(--ink);
+  line-height: 1.6;
+  word-break: break-word;
+}
+
+/* ===== Disclosure 行（查看详情） ===== */
+.card-footer {
+  margin-top: 24rpx;
+  padding: 20rpx 12rpx 0;
+  border-top: 2rpx solid var(--paper);
+  display: flex;
+  align-items: center;
+  border-radius: 0 0 28rpx 28rpx;
+}
+
+.footer-hover {
+  background: var(--paper);
+}
+
+.footer-text {
+  font-size: 28rpx;
+  color: var(--g600);
+  font-weight: 500;
+}
+
+.footer-chevron {
+  margin-left: auto;
+  font-size: 40rpx;
+  font-weight: 300;
+  color: #C9C4B2;
+  line-height: 1;
+}
+
+/* 列表底部 */
+.list-end {
+  text-align: center;
+  font-size: 24rpx;
+  color: #B5B0A0;
+  padding: 12rpx 0 8rpx;
+}
+
+/* ===== 空状态 / 未登录 / 加载 ===== */
+.state-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 180rpx 80rpx 0;
+}
+
+.state-icon {
+  width: 144rpx;
+  height: 144rpx;
+  border-radius: 50%;
+  background: #EFEADA;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 36rpx;
+}
+
+.state-glyph {
+  font-size: 68rpx;
+  line-height: 1;
+}
+
+.state-title {
+  font-size: 34rpx;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 14rpx;
+}
+
+.state-sub {
+  font-size: 28rpx;
+  color: var(--ink-3);
+  line-height: 1.6;
+  text-align: center;
+}
+
+/* 登录按钮：iOS 蓝 → 品牌深绿渐变 */
+.ios-btn {
+  margin-top: 56rpx;
+  background: linear-gradient(160deg, #2F6B42, #3D7A50);
+  color: #FFFFFF;
+  font-size: 32rpx;
+  font-weight: 600;
+  padding: 24rpx 110rpx;
+  border-radius: 100rpx;
+  letter-spacing: 2rpx;
+  box-shadow: 0 4rpx 14rpx rgba(47, 107, 66, 0.28);
+}
+
+.ios-btn-hover {
+  opacity: 0.85;
+}
+
+/* 加载指示器 */
+.ios-spinner {
+  width: 56rpx;
+  height: 56rpx;
+  border: 6rpx solid #E7E1D2;
+  border-top-color: var(--g600);
+  border-radius: 50%;
+  animation: ios-spin 0.8s linear infinite;
+  margin-bottom: 28rpx;
+}
+
+@keyframes ios-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.safe-bottom {
+  height: 40rpx;
+}

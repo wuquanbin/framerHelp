@@ -1,0 +1,992 @@
+/* ========== 农事服务 · 田园晨野 ========== */
+
+.page {
+  min-height: 100vh;
+  background: var(--paper);
+  padding-bottom: 120rpx;
+}
+
+/* Large Title */
+.large-title-header {
+  padding: 20rpx 32rpx 24rpx;
+}
+
+.large-title {
+  display: block;
+  font-size: 56rpx;
+  font-weight: 800;
+  color: var(--g900);
+  letter-spacing: 6rpx;
+}
+
+.large-subtitle {
+  display: block;
+  font-size: 26rpx;
+  color: var(--ink-3);
+  margin-top: 10rpx;
+  letter-spacing: 2rpx;
+}
+
+/* 分段控制：米色轨道 + 深绿选中块 */
+.segmented-wrapper {
+  padding: 0 32rpx 8rpx;
+}
+
+/* 横向滑动容器。
+   white-space: nowrap 是关键 —— 它保证即使以后加到第七个 Tab，
+   文案也只会把轨道撑宽，而不是被压成两行。 */
+.segmented-scroll {
+  width: 100%;
+  white-space: nowrap;
+}
+
+/* 轨道改成 inline-flex：宽度由内容撑开，超出视口的部分交给 scroll-view 滚。
+   原来用 flex:1 均分每格只剩 112rpx，四字文案必折行。 */
+.segmented-control {
+  display: inline-flex;
+  align-items: center;
+  background: var(--seg-bg);
+  border-radius: 26rpx;
+  padding: 6rpx;
+  height: 72rpx;
+  box-sizing: border-box;
+}
+
+.segmented-item {
+  flex: none;
+  height: 60rpx;
+  line-height: 60rpx;
+  padding: 0 22rpx;
+  border-radius: 20rpx;
+  /* 字号恢复到 25rpx：横滑之后不再受每格 112rpx 的限制 */
+  font-size: 25rpx;
+  color: var(--ink-2);
+  letter-spacing: 1rpx;
+  white-space: nowrap;
+  transition: background-color, border-color, color, box-shadow, opacity 0.25s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+.segmented-item.active {
+  background: var(--g600);
+  color: var(--cream);
+  font-weight: 700;
+  box-shadow: 0 4rpx 12rpx rgba(31, 77, 46, 0.28);
+}
+
+/* Section Label */
+.section-label {
+  font-size: 22rpx;
+  color: var(--ink-3);
+  letter-spacing: 5rpx;
+  padding: 16rpx 8rpx 12rpx;
+  font-weight: 700;
+}
+
+/* Tab Content */
+.tab-content {
+  padding: 0 32rpx;
+}
+
+/* ========== Farm Advice Cards ========== */
+.advice-card {
+  display: flex;
+  align-items: flex-start;
+  background: var(--card);
+  border: 1rpx solid var(--card-bd);
+  border-radius: 24rpx;
+  padding: 28rpx 24rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 1rpx 2rpx rgba(60, 52, 30, 0.04), 0 6rpx 18rpx rgba(60, 52, 30, 0.05);
+}
+
+.advice-card-left {
+  margin-right: 22rpx;
+  padding-top: 2rpx;
+}
+
+.advice-icon-wrap {
+  width: 76rpx;
+  height: 76rpx;
+  border-radius: 24rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 优先级着色：紧急陶红 / 重要稻金 / 常规品牌绿 */
+.advice-icon-wrap.priority-high {
+  background: var(--clay-tint);
+}
+
+.advice-icon-wrap.priority-medium {
+  background: var(--gold-tint);
+}
+
+.advice-icon-wrap.priority-low {
+  background: var(--g-tint);
+}
+
+.advice-card-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.advice-card-header {
+  display: flex;
+  align-items: center;
+  gap: 14rpx;
+  margin-bottom: 10rpx;
+}
+
+.advice-title {
+  font-size: 30rpx;
+  font-weight: 700;
+  color: var(--ink);
+  flex: 1;
+  min-width: 0;
+  letter-spacing: 1rpx;
+}
+
+.advice-pri-tag {
+  font-size: 20rpx;
+  font-weight: 700;
+  padding: 4rpx 14rpx;
+  border-radius: 8rpx;
+  letter-spacing: 2rpx;
+  flex-shrink: 0;
+}
+
+.advice-pri-tag.priority-high {
+  background: var(--clay-tint);
+  color: var(--clay);
+}
+
+.advice-pri-tag.priority-medium {
+  background: var(--gold-tint);
+  color: var(--gold-deep);
+}
+
+.advice-pri-tag.priority-low {
+  background: var(--g-tint);
+  color: var(--g600);
+}
+
+.advice-summary {
+  font-size: 26rpx;
+  color: var(--ink-2);
+  line-height: 1.55;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.advice-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 14rpx;
+}
+
+.advice-time {
+  font-size: 22rpx;
+  color: var(--ink-3);
+  letter-spacing: 1rpx;
+}
+
+.chevron {
+  width: 12rpx;
+  height: 12rpx;
+  border-right: 3rpx solid var(--ink-3);
+  border-bottom: 3rpx solid var(--ink-3);
+  transform: rotate(-45deg);
+}
+
+/* ========== Crop Grid Cards ========== */
+.crop-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24rpx;
+}
+
+.crop-card {
+  background: var(--card);
+  border: 1rpx solid var(--card-bd);
+  border-radius: 24rpx;
+  overflow: hidden;
+  box-shadow: 0 1rpx 2rpx rgba(60, 52, 30, 0.04), 0 8rpx 22rpx rgba(60, 52, 30, 0.07);
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.crop-card:active {
+  transform: scale(0.96);
+}
+
+/* 作物展示底座：底部径向渐变模拟地面投影 */
+.crop-image-wrap {
+  position: relative;
+  width: 100%;
+  height: 240rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  -webkit-perspective: 1000rpx;
+  perspective: 1000rpx;
+  background:
+    radial-gradient(ellipse 120rpx 20rpx at 50% calc(100% - 20rpx), rgba(0,0,0,0.20) 0%, rgba(0,0,0,0.08) 40%, transparent 75%),
+    transparent;
+  background-repeat: no-repeat;
+}
+
+.crop-image-3d {
+  width: 180rpx;
+  height: 180rpx;
+  border-radius: 0;
+  background: transparent;
+  -webkit-filter: drop-shadow(0 10rpx 20rpx rgba(0, 0, 0, 0.25));
+  filter: drop-shadow(0 10rpx 20rpx rgba(0, 0, 0, 0.25));
+  -webkit-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+  position: relative;
+  z-index: 2;
+  border: none;
+}
+
+.crop-emoji-fallback {
+  font-size: 80rpx;
+  position: relative;
+  z-index: 2;
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: 24rpx;
+  background: rgba(255, 255, 255, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 4rpx solid rgba(255, 255, 255, 0.6);
+  -webkit-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+}
+
+/* 触摸时轻微放大 */
+.crop-image-wrap.zoomed .crop-image-3d,
+.crop-image-wrap.zoomed .crop-emoji-fallback {
+  -webkit-transform: scale(1.12);
+  transform: scale(1.12);
+}
+
+/* 玻璃反光效果 */
+.crop-glass-effect {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.35) 0%,
+    rgba(255, 255, 255, 0.05) 40%,
+    rgba(255, 255, 255, 0) 50%,
+    rgba(255, 255, 255, 0.08) 80%,
+    rgba(255, 255, 255, 0.25) 100%
+  );
+  z-index: 3;
+  pointer-events: none;
+}
+
+/* 作物渐变背景（保留原有分类渐变，色温统一到暖调） */
+.gradient-rice { background: linear-gradient(135deg, #FFE066 0%, #F4C430 40%, #DAA520 100%); }
+.gradient-melon { background: linear-gradient(135deg, #00E676 0%, #26A69A 60%, #0277BD 100%); }
+.gradient-veggie { background: linear-gradient(135deg, #B9F6CA 0%, #69F0AE 40%, #00C853 100%); }
+.gradient-root { background: linear-gradient(135deg, #FFE0B2 0%, #FFCC80 40%, #D84315 100%); }
+.gradient-tea { background: linear-gradient(135deg, #C8E6C9 0%, #81C784 40%, #388E3C 100%); }
+.gradient-fruit { background: linear-gradient(135deg, #FFCDD2 0%, #EF9A9A 40%, #C62828 100%); }
+.gradient-flower { background: linear-gradient(135deg, #F8BBD9 0%, #F48FB1 40%, #AD1457 100%); }
+.gradient-citrus { background: linear-gradient(135deg, #FFF59D 0%, #FFD54F 40%, #E65100 100%); }
+.gradient-lotus { background: linear-gradient(135deg, #B2EBF2 0%, #4DD0E1 40%, #00695C 100%); }
+.gradient-fish { background: linear-gradient(135deg, #BBDEFB 0%, #64B5F6 40%, #1565C0 100%); }
+.gradient-default { background: linear-gradient(135deg, #ECEFF1 0%, #CFD8DC 50%, #78909C 100%); }
+
+.crop-risk-badge {
+  position: absolute;
+  top: 16rpx;
+  right: 16rpx;
+  z-index: 4;
+  font-size: 20rpx;
+  font-weight: 700;
+  padding: 6rpx 16rpx;
+  border-radius: 100rpx;
+  color: #fff;
+  letter-spacing: 2rpx;
+}
+
+.risk-high { background: rgba(176, 69, 43, 0.92); }
+.risk-medium { background: rgba(160, 126, 20, 0.92); }
+.risk-low { background: rgba(47, 107, 66, 0.92); }
+
+.crop-card-body {
+  padding: 20rpx;
+}
+
+.crop-name {
+  display: block;
+  font-size: 30rpx;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 6rpx;
+  letter-spacing: 1rpx;
+}
+
+.crop-stage {
+  display: block;
+  font-size: 24rpx;
+  color: var(--ink-3);
+}
+
+/* ========== Disaster Cards ========== */
+.disaster-card {
+  display: flex;
+  background: var(--card);
+  border: 1rpx solid var(--card-bd);
+  border-radius: 24rpx;
+  overflow: hidden;
+  margin-bottom: 20rpx;
+  box-shadow: 0 1rpx 2rpx rgba(60, 52, 30, 0.04), 0 6rpx 18rpx rgba(60, 52, 30, 0.05);
+}
+
+.disaster-severity-bar {
+  width: 8rpx;
+  flex-shrink: 0;
+}
+
+.severity-severe { background: var(--clay); }
+.severity-moderate { background: var(--gold); }
+.severity-mild { background: #C9C227; }
+
+.disaster-card-body {
+  flex: 1;
+  padding: 24rpx 24rpx;
+  min-width: 0;
+}
+
+.disaster-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10rpx;
+}
+
+.disaster-title {
+  font-size: 30rpx;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.severity-tag {
+  font-size: 20rpx;
+  font-weight: 700;
+  padding: 4rpx 12rpx;
+  border-radius: 8rpx;
+  color: #fff;
+  letter-spacing: 2rpx;
+}
+
+.disaster-location-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 8rpx;
+  margin-bottom: 6rpx;
+}
+
+.disaster-pin {
+  margin-top: 4rpx;
+}
+
+.disaster-location {
+  font-size: 26rpx;
+  color: var(--ink-2);
+  line-height: 1.5;
+  flex: 1;
+  min-width: 0;
+}
+
+.disaster-time {
+  font-size: 22rpx;
+  color: var(--ink-3);
+  letter-spacing: 1rpx;
+}
+
+/* ========== Empty State ========== */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 100rpx 0;
+}
+
+.empty-icon {
+  font-size: 64rpx;
+  margin-bottom: 16rpx;
+  opacity: 0.45;
+}
+
+.empty-text {
+  font-size: 28rpx;
+  color: var(--ink-3);
+  letter-spacing: 2rpx;
+}
+
+.bottom-safe {
+  height: 120rpx;
+}
+
+/* ========== Crop Reminder Cards ========== */
+.reminder-card {
+  display: flex;
+  align-items: flex-start;
+  background: var(--card);
+  border: 1rpx solid var(--card-bd);
+  border-radius: 24rpx;
+  padding: 28rpx 24rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 1rpx 2rpx rgba(60, 52, 30, 0.04), 0 6rpx 18rpx rgba(60, 52, 30, 0.05);
+}
+
+.reminder-card-left {
+  margin-right: 22rpx;
+  padding-top: 4rpx;
+  flex-shrink: 0;
+}
+
+.reminder-icon-wrap {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 22rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.reminder-icon {
+  font-size: 38rpx;
+}
+
+/* 作物图标背景色（暖调统一） */
+.bg-rice { background: rgba(201, 162, 39, 0.16); }
+.bg-corn { background: rgba(160, 126, 20, 0.14); }
+.bg-veggie { background: rgba(47, 107, 66, 0.13); }
+.bg-fruit { background: rgba(176, 69, 43, 0.11); }
+.bg-cash { background: rgba(122, 95, 160, 0.12); }
+.bg-tea { background: rgba(62, 110, 143, 0.12); }
+.bg-flower { background: rgba(173, 74, 125, 0.12); }
+.bg-fish { background: rgba(90, 140, 170, 0.14); }
+.bg-default { background: rgba(169, 164, 140, 0.14); }
+
+.reminder-card-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.reminder-card-header {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12rpx;
+  margin-bottom: 16rpx;
+}
+
+.reminder-crop-name {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: 1rpx;
+}
+
+.reminder-stage-tag {
+  font-size: 20rpx;
+  font-weight: 500;
+  color: var(--ink-2);
+  background: var(--seg-bg);
+  padding: 4rpx 14rpx;
+  border-radius: 8rpx;
+  flex-shrink: 0;
+}
+
+.reminder-urgency-tag {
+  font-size: 20rpx;
+  font-weight: 700;
+  padding: 4rpx 14rpx;
+  border-radius: 8rpx;
+  flex-shrink: 0;
+  letter-spacing: 1rpx;
+}
+
+.urgency-urgent {
+  background: var(--clay-tint);
+  color: var(--clay);
+}
+
+.urgency-important {
+  background: var(--gold-tint);
+  color: var(--gold-deep);
+}
+
+.urgency-normal {
+  background: var(--g-tint);
+  color: var(--g600);
+}
+
+/* 天气影响区域 */
+.reminder-weather-impact {
+  background: var(--paper);
+  border: 1rpx solid var(--hairline);
+  border-radius: 12rpx;
+  padding: 14rpx 16rpx;
+  margin-bottom: 12rpx;
+}
+
+.reminder-impact-label {
+  font-size: 22rpx;
+  font-weight: 700;
+  color: var(--ink-3);
+  margin-right: 10rpx;
+  letter-spacing: 2rpx;
+}
+
+.reminder-impact-text {
+  font-size: 24rpx;
+  color: var(--ink-2);
+  line-height: 1.5;
+}
+
+/* 农事建议区域 */
+.reminder-suggestion {
+  background: var(--g-tint);
+  border-radius: 12rpx;
+  padding: 14rpx 16rpx;
+  border-left: 6rpx solid var(--g600);
+}
+
+.reminder-suggestion-label {
+  font-size: 22rpx;
+  font-weight: 700;
+  color: var(--g600);
+  margin-right: 10rpx;
+  letter-spacing: 2rpx;
+}
+
+.reminder-suggestion-text {
+  font-size: 26rpx;
+  color: var(--ink);
+  line-height: 1.6;
+  font-weight: 500;
+}
+
+/* ========== 今日任务卡片 ========== */
+.task-guide-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: var(--card);
+  border: 1rpx solid var(--card-bd);
+  border-radius: 24rpx;
+  padding: 48rpx 32rpx;
+  text-align: center;
+}
+
+.task-guide-ic {
+  margin-bottom: 20rpx;
+  opacity: 0.85;
+}
+
+.task-guide-title {
+  font-size: 30rpx;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 10rpx;
+}
+
+.task-guide-desc {
+  font-size: 26rpx;
+  color: var(--ink-2);
+  line-height: 1.5;
+  margin-bottom: 24rpx;
+}
+
+.task-guide-btn {
+  background: linear-gradient(160deg, #2F6B42, #3D7A50);
+  color: #fff;
+  font-size: 28rpx;
+  font-weight: 600;
+  padding: 16rpx 56rpx;
+  border-radius: 40rpx;
+  letter-spacing: 4rpx;
+  box-shadow: 0 4rpx 14rpx rgba(47, 107, 66, 0.28);
+}
+
+.task-card {
+  display: flex;
+  align-items: flex-start;
+  background: var(--card);
+  border: 1rpx solid var(--card-bd);
+  border-radius: 24rpx;
+  padding: 28rpx 24rpx;
+  margin-bottom: 20rpx;
+  border-left: 8rpx solid var(--ink-3);
+  box-shadow: 0 1rpx 2rpx rgba(60, 52, 30, 0.04), 0 6rpx 18rpx rgba(60, 52, 30, 0.05);
+  transition: background-color, border-color, color, box-shadow, opacity 0.2s ease;
+}
+
+.task-card.priority-high {
+  border-left-color: var(--clay);
+  background: linear-gradient(135deg, rgba(176, 69, 43, 0.05), rgba(176, 69, 43, 0.01));
+}
+
+.task-card.priority-medium {
+  border-left-color: var(--gold);
+  background: linear-gradient(135deg, rgba(201, 162, 39, 0.05), rgba(201, 162, 39, 0.01));
+}
+
+.task-card.priority-low {
+  border-left-color: var(--g600);
+}
+
+.task-card-left {
+  margin-right: 18rpx;
+  flex-shrink: 0;
+}
+
+.task-priority-badge {
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: 18rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--seg-bg);
+}
+
+.task-priority-badge.priority-high {
+  background: var(--clay-tint);
+}
+
+.task-priority-badge.priority-medium {
+  background: var(--gold-tint);
+}
+
+.task-priority-badge.priority-low {
+  background: var(--g-tint);
+}
+
+.task-priority-text {
+  font-size: 20rpx;
+  font-weight: 700;
+  color: var(--ink-3);
+  letter-spacing: 1rpx;
+}
+
+.task-priority-badge.priority-high .task-priority-text {
+  color: var(--clay);
+}
+
+.task-priority-badge.priority-medium .task-priority-text {
+  color: var(--gold-deep);
+}
+
+.task-priority-badge.priority-low .task-priority-text {
+  color: var(--g600);
+}
+
+.task-card-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.task-card-header {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  margin-bottom: 8rpx;
+}
+
+.task-crop-name {
+  font-size: 30rpx;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.task-day-badge {
+  font-size: 20rpx;
+  font-weight: 500;
+  color: var(--g600);
+  background: var(--g-tint);
+  padding: 4rpx 12rpx;
+  border-radius: 8rpx;
+}
+
+.task-name {
+  display: block;
+  font-size: 28rpx;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 6rpx;
+}
+
+.task-desc {
+  display: block;
+  font-size: 24rpx;
+  color: var(--ink-2);
+  line-height: 1.5;
+}
+
+/* 打卡按钮（农事任务闭环：提醒→执行→记录） */
+.task-check-btn {
+  flex-shrink: 0;
+  align-self: center;
+  margin-left: 18rpx;
+  padding: 14rpx 24rpx;
+  border-radius: 32rpx;
+  font-size: 24rpx;
+  font-weight: 600;
+  color: #fff;
+  background: var(--g600);
+  box-shadow: 0 4rpx 12rpx rgba(47, 107, 66, 0.25);
+}
+
+.task-check-btn.checked {
+  color: var(--g600);
+  background: var(--g-tint);
+  box-shadow: none;
+}
+
+/* 已完成任务：整卡降饱和，任务名划线 */
+.task-card.task-done {
+  opacity: 0.62;
+}
+
+.task-card.task-done .task-name {
+  text-decoration: line-through;
+}
+
+.task-done-time {
+  display: block;
+  font-size: 22rpx;
+  color: var(--g600);
+  margin-top: 8rpx;
+}
+
+.empty-sub {
+  display: block;
+  font-size: 23rpx;
+  color: var(--ink-3);
+  margin-top: 10rpx;
+}
+
+/* ============ 农事档案 ============
+   完成率是这一屏唯一的大数字，其余都降级为小统计，
+   避免「四个数字一样大」让人不知道先看哪个。 */
+.archive-hero {
+  display: flex;
+  align-items: center;
+  gap: 24rpx;
+  padding: 30rpx 28rpx;
+  border-radius: 24rpx;
+  background: linear-gradient(135deg, var(--g700) 0%, var(--g600) 100%);
+  box-shadow: 0 8rpx 24rpx rgba(30, 70, 52, 0.18);
+  margin-bottom: 28rpx;
+}
+
+.archive-hero-main {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  padding-right: 24rpx;
+  border-right: 1rpx solid rgba(244, 241, 232, 0.28);
+}
+
+.archive-rate {
+  font-size: 62rpx;
+  font-weight: 700;
+  line-height: 1.05;
+  /* 用金浅色而不是品牌金 #C9A227：品牌金在深绿底上只有 2.63:1，
+     连「大字 3:1」的放宽标准都够不上。金浅色 5.24:1，且仍在金色调里。 */
+  color: var(--gold-tint);
+  letter-spacing: -1rpx;
+}
+
+.archive-rate-label {
+  font-size: 22rpx;
+  color: rgba(244, 241, 232, 0.82);
+  margin-top: 6rpx;
+}
+
+.archive-hero-stats {
+  flex: 1;
+  display: flex;
+  justify-content: space-around;
+}
+
+.archive-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.archive-stat-num {
+  font-size: 34rpx;
+  font-weight: 600;
+  color: var(--cream);
+  line-height: 1.2;
+}
+
+.archive-stat-label {
+  font-size: 21rpx;
+  color: rgba(244, 241, 232, 0.72);
+  margin-top: 4rpx;
+}
+
+/* 打卡日历：30 个方格，一行 10 个，按完成度着色 */
+.archive-cal {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+  padding: 22rpx;
+  border: 1rpx solid var(--card-bd);
+  border-radius: 20rpx;
+  background: var(--card);
+}
+
+.archive-cal-cell {
+  width: 52rpx;
+  height: 52rpx;
+  border-radius: 14rpx;
+  box-sizing: border-box;
+}
+
+.archive-cal-cell.none {
+  background: #f0ede2;
+}
+.archive-cal-cell.zero {
+  background: var(--card);
+  border: 1rpx solid var(--clay-tint);
+}
+.archive-cal-cell.part {
+  background: var(--gold-tint);
+  border: 1rpx solid var(--gold);
+}
+.archive-cal-cell.full {
+  background: var(--g600);
+  border: 1rpx solid var(--g700);
+}
+
+.archive-legend {
+  display: flex;
+  gap: 24rpx;
+  margin: 16rpx 0 4rpx;
+}
+
+.archive-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  font-size: 21rpx;
+  color: var(--ink-3);
+}
+
+.archive-cal-cell.legend {
+  width: 22rpx;
+  height: 22rpx;
+  border-radius: 6rpx;
+}
+
+/* 按天分组的执行明细 */
+.archive-day {
+  margin-top: 24rpx;
+  border: 1rpx solid var(--card-bd);
+  border-radius: 20rpx;
+  background: var(--card);
+  overflow: hidden;
+}
+
+.archive-day-head {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  padding: 18rpx 24rpx;
+  border-bottom: 1rpx solid var(--hairline);
+  background: #fbf9f3;
+}
+
+.archive-day-date {
+  font-size: 26rpx;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.archive-day-week {
+  font-size: 22rpx;
+  color: var(--ink-3);
+}
+
+.archive-day-rate {
+  margin-left: auto;
+  font-size: 22rpx;
+  color: var(--g600);
+  font-weight: 600;
+}
+
+.archive-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16rpx;
+  padding: 18rpx 24rpx;
+  border-bottom: 1rpx solid var(--hairline);
+}
+
+.archive-item:last-child {
+  border-bottom: none;
+}
+
+.archive-item-dot {
+  flex: none;
+  width: 18rpx;
+  height: 18rpx;
+  margin-top: 8rpx;
+  border-radius: 50%;
+  background: var(--card);
+  border: 2rpx solid var(--ink-3);
+}
+
+.archive-item-dot.done {
+  background: var(--g600);
+  border-color: var(--g600);
+}
+
+.archive-item-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.archive-item-name {
+  display: block;
+  font-size: 25rpx;
+  color: var(--ink);
+  line-height: 1.45;
+}
+
+.archive-item.done .archive-item-name {
+  color: var(--ink-2);
+}
+
+.archive-item-sub {
+  display: block;
+  font-size: 21rpx;
+  color: var(--ink-3);
+  margin-top: 4rpx;
+}
+
+.archive-item-sub.pending {
+  color: var(--clay);
+}

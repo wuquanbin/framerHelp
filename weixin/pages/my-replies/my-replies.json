@@ -1,0 +1,10 @@
+{
+  "navigationBarTitleText": "我的回复",
+  "navigationBarBackgroundColor": "#1E4634",
+  "navigationBarTextStyle": "white",
+  "enablePullDownRefresh": true,
+  "backgroundColor": "#F4F1E8",
+  "usingComponents": {
+    "load-error": "/components/load-error/load-error"
+  }
+}

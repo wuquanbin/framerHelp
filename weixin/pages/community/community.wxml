@@ -1,0 +1,85 @@
+<view class="container">
+  <!-- 顶部筛选 -->
+  <view class="filter-bar">
+    <view class="filter-tabs">
+      <view class="filter-tab {{currentType === '' ? 'active' : ''}}" hover-class="filter-tab-hover" hover-stay-time="60" bindtap="filterByType" data-type="">全部</view>
+      <view class="filter-tab {{currentType === 'pest' ? 'active' : ''}}" hover-class="filter-tab-hover" hover-stay-time="60" bindtap="filterByType" data-type="pest">病虫害</view>
+      <view class="filter-tab {{currentType === 'disaster' ? 'active' : ''}}" hover-class="filter-tab-hover" hover-stay-time="60" bindtap="filterByType" data-type="disaster">灾损</view>
+      <view class="filter-tab {{currentType === 'growth' ? 'active' : ''}}" hover-class="filter-tab-hover" hover-stay-time="60" bindtap="filterByType" data-type="growth">长势</view>
+      <view class="filter-tab {{currentType === 'help' ? 'active' : ''}}" hover-class="filter-tab-hover" hover-stay-time="60" bindtap="filterByType" data-type="help">求助</view>
+    </view>
+  </view>
+
+  <!-- 加载失败：列表拉不出来时给出重试入口，而不是留一片空白 -->
+  <load-error wx:if="{{loadError}}" msg="{{loadErrorMsg}}" bind:retry="onRetryLoad" />
+
+  <!-- 上报列表 -->
+  <view class="report-list" wx:if="{{reports.length > 0}}">
+    <view class="report-card" wx:for="{{reports}}" wx:key="id" bindtap="goDetail" data-id="{{item.id}}" hover-class="card-hover" hover-stay-time="60">
+      <view class="report-header">
+        <image class="avatar" src="{{item.displayAvatar || defaultMaleAvatar}}" mode="aspectFill" data-index="{{index}}" binderror="onAvatarError"></image>
+        <view class="header-info">
+          <text class="nickname">{{item.nickname || '农户'}}</text>
+          <text class="village">{{item.villageName}}</text>
+        </view>
+        <view class="header-right">
+          <view class="type-tag type-{{item.reportType}}">{{typeLabels[item.reportType] || item.reportType}}</view>
+          <text class="header-time">{{item.timeText}}</text>
+        </view>
+      </view>
+      <view class="report-title">{{item.title}}</view>
+      <view class="report-desc">{{item.description}}</view>
+      <view class="report-images" wx:if="{{item.imageUrls}}">
+        <image class="report-img" wx:for="{{item.parsedImages}}" wx:for-item="img" wx:key="*this" src="{{img}}" mode="aspectFill" bindtap="previewImage" data-url="{{img}}"></image>
+      </view>
+      <view class="report-footer">
+        <view class="footer-left">
+          <text class="crop-tag" wx:if="{{item.cropName}}">{{item.cropName}}</text>
+          <text class="stage-tag" wx:if="{{item.growthStage}}">{{item.growthStage}}</text>
+        </view>
+        <view class="footer-right">
+          <view class="status-badge status-{{item.status}}">{{statusLabels[item.status] || item.status}}</view>
+          <view class="urgency-badge" wx:if="{{item.urgency === 'high'}}">紧急</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 骨架屏（首次加载） -->
+  <view class="sk-list" wx:if="{{loading && reports.length === 0}}">
+    <view class="sk-card" wx:for="{{[1, 2, 3]}}" wx:key="*this">
+      <view class="sk-row">
+        <view class="sk-avatar sk-bone"></view>
+        <view class="sk-col">
+          <view class="sk-bone sk-line w40"></view>
+          <view class="sk-bone sk-line w25"></view>
+        </view>
+      </view>
+      <view class="sk-bone sk-line w90"></view>
+      <view class="sk-bone sk-line w65"></view>
+      <view class="sk-bone sk-img"></view>
+    </view>
+  </view>
+
+  <!-- 空状态：田园小景 + 行动引导 -->
+  <view class="empty" wx:if="{{!loading && !loadError && reports.length === 0}}">
+    <view class="empty-scene">
+      <view class="empty-sun"></view>
+      <view class="empty-hill empty-hill-back"></view>
+      <view class="empty-hill empty-hill-front"></view>
+      <text class="empty-sprout">🌾</text>
+    </view>
+    <text class="empty-title">暂无农情上报</text>
+    <text class="empty-sub">田里遇到病虫害、灾损，或想晒晒长势，都可以报上来</text>
+    <view class="empty-cta" bindtap="goCreate" hover-class="empty-cta-hover">
+      <text class="empty-cta-plus">+</text>
+      <text>立即上报</text>
+    </view>
+  </view>
+
+  <!-- 上报按钮 -->
+  <view class="fab-btn" bindtap="goCreate" hover-class="fab-hover">
+    <text class="fab-plus">+</text>
+    <text class="fab-text">上报农情</text>
+  </view>
+</view>

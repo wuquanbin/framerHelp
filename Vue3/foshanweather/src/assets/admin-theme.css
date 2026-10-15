@@ -1,0 +1,122 @@
+/**
+ * 后台管理系统主题：对 Element Plus 默认配色与圆角的覆盖。
+ * 注意：本文件必须在 element-plus/dist/index.css 之后引入，否则会被默认蓝色主题覆盖。
+ */
+
+:root {
+  --el-color-primary: #3f7f52;
+  --el-color-primary-light-3: #6ba376;
+  --el-color-primary-light-5: #8fbd99;
+  --el-color-primary-light-7: #b8d7bf;
+  --el-color-primary-light-8: #cfe5d4;
+  --el-color-primary-light-9: #e7f2ea;
+  --el-color-primary-dark-2: #2f6240;
+
+  --el-color-success: #3f7f52;
+  --el-color-success-light-9: #e7f2ea;
+  --el-color-warning: #d98324;
+  --el-color-warning-light-9: #fdf3e3;
+  --el-color-danger: #d0544a;
+  --el-color-danger-light-9: #fdecec;
+  --el-color-error: #d0544a;
+
+  --el-border-radius-base: 10px;
+  --el-border-radius-small: 8px;
+  --el-font-family: inherit;
+  --el-font-size-base: 13.5px;
+  --el-text-color-primary: #2b3a32;
+  --el-text-color-regular: #46554d;
+  --el-border-color: #dbe3dd;
+  --el-border-color-light: #e6ece8;
+}
+
+/* 表格：去掉硬边框，改用柔和分隔线 */
+.el-table {
+  --el-table-border-color: #eef2ee;
+  --el-table-header-bg-color: #f6faf7;
+  --el-table-header-text-color: #46554d;
+  --el-table-row-hover-bg-color: #f2f8f4;
+  border-radius: 12px;
+}
+.el-table th.el-table__cell {
+  font-weight: 500;
+}
+
+/* 按钮与输入控件更贴合新的圆角语言 */
+.el-button {
+  font-weight: 400;
+}
+.el-card,
+.el-dialog,
+.el-drawer {
+  border-radius: 14px;
+}
+.el-tag {
+  border-radius: 8px;
+}
+
+/* ============ 弹窗层级 ============
+   遮罩负责把整个视口压下去、弹窗负责浮起来，两者缺一，弹窗就会"陷"在页面里。
+   注意：遮罩本身不含 fixed 子元素，加模糊是安全的；但它的**祖先**绝不能有
+   transform / filter / backdrop-filter —— 那会让遮罩被关进祖先的盒子里。 */
+.el-overlay {
+  background-color: rgba(14, 28, 20, 0.36);
+  backdrop-filter: blur(3px) saturate(120%);
+}
+.el-dialog {
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  /* 三层阴影：贴近的接触阴影 + 中景 + 远景扩散，比单层阴影更能表达"离地高度" */
+  box-shadow:
+    0 2px 6px rgba(12, 26, 18, 0.08),
+    0 18px 40px rgba(12, 26, 18, 0.16),
+    0 48px 96px rgba(12, 26, 18, 0.2);
+}
+.el-dialog__header {
+  padding-bottom: 14px;
+  margin-right: 0;
+  border-bottom: 1px solid #eef2ee;
+}
+.el-dialog__title {
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: #22332a;
+}
+.el-dialog__body {
+  padding-top: 20px;
+}
+
+/* ============ 服务端分页条 ============
+   后台所有列表页共用（灾害记录 / 帮扶台账 / 农户 / 反馈 / 农情 / 日志）。
+   写在这里而不是每个页面各抄一份，是为了让「表格与分页器之间的距离、
+   对齐方式、圆角」永远一致 —— 分页器是表格的脚注，不是独立组件。 */
+.pagination-bar {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid #eef2ee;
+}
+.pagination-bar .el-pagination {
+  --el-pagination-font-size: 13px;
+  padding: 0;
+  font-weight: 400;
+}
+.pagination-bar .el-pagination .el-pager li,
+.pagination-bar .el-pagination button {
+  border-radius: 8px;
+}
+.pagination-bar .el-pagination__total {
+  color: #7b8b81;
+}
+/* 分页器在窄屏换行，避免挤压成两行溢出卡片 */
+@media (max-width: 860px) {
+  .pagination-bar {
+    justify-content: center;
+  }
+  .pagination-bar .el-pagination {
+    flex-wrap: wrap;
+    row-gap: 8px;
+  }
+}

@@ -1,0 +1,146 @@
+/* ============================================================
+   乡村农业气象帮扶 · 全局样式
+   设计方向：田园晨野 —— 深绿 + 米白 + 稻谷金的有机自然
+   Token 说明（改主题只改这里）：
+     --g900 头部深绿起点 / --g700 头部中间 / --g600 品牌绿（主操作）
+     --g-tint 图标浅底 / --gold 稻谷金 / --gold-deep 金色文字 / --gold-tint 金浅底
+     --clay 陶红（紧急）/ --clay-tint 陶红浅底
+     --paper 页面米白底 / --card 卡片底 / --card-bd 卡片描边 / --hairline 发丝线
+     --ink 主文字 / --ink-2 次级文字 / --ink-3 说明性小字
+   ============================================================ */
+@import "styles/icons.wxss";
+
+page {
+  --g900: #1E4634;
+  --g700: #27573C;
+  --g600: #2F6B42;
+  --g-tint: #E4EDDD;
+  --gold: #C9A227;
+  --gold-deep: #A07E14;
+  --gold-tint: #F3E9C8;
+  --clay: #B0452B;
+  --clay-tint: #F4DDD4;
+  --paper: #F4F1E8;
+  --card: #FDFCF8;
+  --card-bd: #E7E1D2;
+  --hairline: #EFEADA;
+  --seg-bg: #E9E4D3;
+  --ink: #26332B;
+  /* 灰阶经过对比度校准：这三级都要能在米白纸底（--paper #F4F1E8）上达到 WCAG AA 4.5:1，
+     因为用户是农户、年龄偏大，说明性小字也不能糊。
+     原值 --ink-2 #6B6F63 (4.56) / --ink-3 #A9A48C (2.22) —— 第三级只有 2.22，严重不达标。
+     校准后：ink 11.69 / ink-2 5.82 / ink-3 4.65，层次仍在但全部合规。 */
+  --ink-2: #5A5F52;
+  --ink-3: #696E60;
+  --cream: #F4F1E8;
+
+  background-color: var(--paper);
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'PingFang SC', 'Helvetica Neue', sans-serif;
+  font-size: 28rpx;
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+.container {
+  padding: 20rpx 32rpx;
+  padding-bottom: 160rpx;
+}
+
+.page {
+  padding: 20rpx 32rpx;
+  padding-bottom: 40rpx;
+}
+
+/* ============ 卡片 ============ */
+.card {
+  background: var(--card);
+  border: 1rpx solid var(--card-bd);
+  border-radius: 24rpx;
+  padding: 32rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 1rpx 2rpx rgba(60, 52, 30, 0.04), 0 6rpx 18rpx rgba(60, 52, 30, 0.05);
+}
+
+.card-title {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 24rpx;
+  letter-spacing: 1rpx;
+}
+
+/* ============ 分区卡片（列表容器） ============ */
+.section-card {
+  background: var(--card);
+  border: 1rpx solid var(--card-bd);
+  border-radius: 24rpx;
+  padding: 0 32rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 1rpx 2rpx rgba(60, 52, 30, 0.04), 0 6rpx 18rpx rgba(60, 52, 30, 0.05);
+  overflow: hidden;
+}
+
+/* ============ 文字工具 ============ */
+.text-primary { color: var(--g600); }
+.text-gray { color: var(--ink-3); }
+.text-secondary { color: var(--ink-2); }
+.text-sm { font-size: 24rpx; }
+.text-lg { font-size: 36rpx; font-weight: 600; }
+.text-xl { font-size: 56rpx; font-weight: 700; letter-spacing: -1rpx; }
+
+.flex { display: flex; }
+.flex-col { flex-direction: column; }
+.items-center { align-items: center; }
+.justify-between { justify-content: space-between; }
+.flex-1 { flex: 1; }
+.mt-20 { margin-top: 20rpx; }
+.mb-20 { margin-bottom: 20rpx; }
+
+/* ============ 徽标 ============ */
+.badge {
+  font-size: 22rpx;
+  font-weight: 600;
+  padding: 6rpx 16rpx;
+  border-radius: 20rpx;
+  letter-spacing: 0.3rpx;
+}
+
+/* ============ 列表行 ============ */
+.list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 26rpx 0;
+  border-bottom: 0.5rpx solid var(--hairline);
+}
+
+.list-item:last-child {
+  border-bottom: none;
+}
+
+/* ============ 主按钮 ============ */
+.btn-primary {
+  background: linear-gradient(160deg, #2F6B42, #3D7A50);
+  color: #fff;
+  border-radius: 20rpx;
+  font-weight: 600;
+  font-size: 32rpx;
+  border: none;
+  letter-spacing: 2rpx;
+  box-shadow: 0 4rpx 14rpx rgba(47, 107, 66, 0.28);
+}
+
+/* 替代小程序不支持的 ::after 伪元素去边框写法 */
+button.btn-primary {
+  border: none;
+  outline: none;
+  background-clip: padding-box;
+}
+
+/* ============ 分段标题（页面内的分区标签） ============ */
+.section-title {
+  font-size: 22rpx;
+  font-weight: 700;
+  color: var(--ink-3);
+  letter-spacing: 4rpx;
+}

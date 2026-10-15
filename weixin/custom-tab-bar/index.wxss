@@ -1,0 +1,327 @@
+.tab-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 110rpx;
+  background: rgba(253, 252, 248, 0.97);
+  z-index: 999;
+}
+
+.tab-bar-border {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1rpx;
+  background: rgba(231, 225, 210, 0.9);
+}
+
+.tab-list {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  height: 100%;
+  padding: 0 10rpx;
+}
+
+/* 普通Tab项 */
+.tab-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-top: 8rpx;
+}
+
+.tab-custom-icon {
+  position: relative;
+  width: 48rpx;
+  height: 48rpx;
+  margin-bottom: 4rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink-3);
+  transition: background-color, border-color, color, box-shadow, opacity 0.2s;
+}
+
+/* "我的"tab 未读回复角标 */
+.tab-badge {
+  position: absolute;
+  top: -10rpx;
+  right: -20rpx;
+  min-width: 28rpx;
+  height: 28rpx;
+  line-height: 28rpx;
+  padding: 0 6rpx;
+  border-radius: 28rpx;
+  background: #B0452B;
+  color: #fff;
+  font-size: 18rpx;
+  text-align: center;
+  box-sizing: border-box;
+  border: 2rpx solid #FDFCF8;
+}
+
+.tab-custom-icon.icon-active {
+  color: #2F6B42;
+}
+
+.tab-text {
+  font-size: 22rpx;
+  color: var(--ink-3);
+  margin-top: 2rpx;
+  letter-spacing: 1rpx;
+}
+
+.tab-active {
+  color: #2F6B42;
+}
+
+/* ===== 首页图标 - 太阳+云 ===== */
+.icon-home {
+  position: relative;
+  width: 48rpx;
+  height: 48rpx;
+}
+
+.sun-body {
+  position: absolute;
+  top: 4rpx;
+  right: 2rpx;
+  width: 24rpx;
+  height: 24rpx;
+  background: currentColor;
+  border-radius: 50%;
+}
+
+.sun-ray {
+  position: absolute;
+  background: currentColor;
+  border-radius: 2rpx;
+}
+
+.sun-ray-1 {
+  top: 0;
+  right: 12rpx;
+  width: 4rpx;
+  height: 8rpx;
+}
+
+.sun-ray-2 {
+  top: 10rpx;
+  right: -4rpx;
+  width: 8rpx;
+  height: 4rpx;
+}
+
+.sun-ray-3 {
+  top: 20rpx;
+  right: -2rpx;
+  width: 4rpx;
+  height: 6rpx;
+  transform: rotate(45deg);
+}
+
+.cloud-body {
+  position: absolute;
+  bottom: 6rpx;
+  left: 0;
+  width: 32rpx;
+  height: 12rpx;
+  background: currentColor;
+  border-radius: 12rpx;
+}
+
+.cloud-bump {
+  position: absolute;
+  bottom: 14rpx;
+  left: 8rpx;
+  width: 16rpx;
+  height: 16rpx;
+  background: currentColor;
+  border-radius: 50%;
+}
+
+/* ===== 农事图标 - 叶子 ===== */
+.icon-farming {
+  position: relative;
+  width: 48rpx;
+  height: 48rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.leaf-body {
+  width: 24rpx;
+  height: 32rpx;
+  background: currentColor;
+  border-radius: 24rpx 4rpx 24rpx 4rpx;
+  transform: rotate(-30deg);
+  opacity: 0.8;
+}
+
+.leaf-stem {
+  position: absolute;
+  bottom: 8rpx;
+  left: 18rpx;
+  width: 14rpx;
+  height: 3rpx;
+  background: currentColor;
+  border-radius: 2rpx;
+  transform: rotate(30deg);
+}
+
+/* ===== 我的图标 - 人物剪影 ===== */
+.icon-profile {
+  position: relative;
+  width: 48rpx;
+  height: 48rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.profile-head {
+  position: absolute;
+  top: 4rpx;
+  width: 18rpx;
+  height: 18rpx;
+  background: currentColor;
+  border-radius: 50%;
+}
+
+.profile-body {
+  position: absolute;
+  bottom: 4rpx;
+  width: 32rpx;
+  height: 18rpx;
+  background: currentColor;
+  border-radius: 18rpx 18rpx 0 0;
+}
+
+/* ===== 社区图标 - 人群气泡 ===== */
+.icon-community {
+  position: relative;
+  width: 48rpx;
+  height: 48rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.community-bubble {
+  position: absolute;
+  width: 28rpx;
+  height: 20rpx;
+  background: currentColor;
+  border-radius: 20rpx 20rpx 20rpx 4rpx;
+  top: 4rpx;
+  right: 4rpx;
+}
+
+.community-person {
+  position: absolute;
+  bottom: 6rpx;
+  width: 14rpx;
+  height: 14rpx;
+  background: currentColor;
+  border-radius: 50%;
+  opacity: 0.5;
+}
+
+.community-person-l {
+  left: 4rpx;
+  bottom: 8rpx;
+}
+
+.community-person-r {
+  left: 20rpx;
+  bottom: 4rpx;
+  width: 10rpx;
+  height: 10rpx;
+}
+
+/* ===== AI 中间凸起按钮 ===== */
+.tab-ai-wrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  margin-top: -40rpx;
+}
+
+.tab-ai-btn {
+  position: relative;
+  width: 112rpx;
+  height: 112rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tab-ai-mountain {
+  position: relative;
+  width: 112rpx;
+  height: 112rpx;
+  border-radius: 50%;
+  background: linear-gradient(150deg, #2F6B42, #4A8A5C);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8rpx 24rpx rgba(47, 107, 66, 0.35), 0 2rpx 8rpx rgba(74, 138, 92, 0.2);
+  animation: aiFloat 3s ease-in-out infinite;
+  overflow: hidden;
+}
+
+.mountain-bg {
+  position: absolute;
+  bottom: 18rpx;
+  left: 10rpx;
+  width: 0;
+  height: 0;
+  border-left: 36rpx solid transparent;
+  border-right: 36rpx solid transparent;
+  border-bottom: 44rpx solid rgba(255, 255, 255, 0.2);
+}
+
+.mountain-fg {
+  position: absolute;
+  bottom: 18rpx;
+  right: 14rpx;
+  width: 0;
+  height: 0;
+  border-left: 28rpx solid transparent;
+  border-right: 28rpx solid transparent;
+  border-bottom: 36rpx solid rgba(255, 255, 255, 0.3);
+}
+
+.tab-ai-text {
+  position: relative;
+  z-index: 1;
+  font-size: 28rpx;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: 2rpx;
+  margin-top: -6rpx;
+}
+
+@keyframes aiFloat {
+  0%, 100% {
+    transform: translateY(0);
+    box-shadow: 0 8rpx 24rpx rgba(47, 107, 66, 0.35), 0 2rpx 8rpx rgba(74, 138, 92, 0.2);
+  }
+  50% {
+    transform: translateY(-8rpx);
+    box-shadow: 0 16rpx 32rpx rgba(47, 107, 66, 0.4), 0 4rpx 12rpx rgba(74, 138, 92, 0.25);
+  }
+}
+
+.tab-ai-wrapper:active .tab-ai-mountain {
+  transform: scale(0.92);
+  animation: none;
+}

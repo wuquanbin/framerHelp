@@ -1,0 +1,315 @@
+/* ========== 我的作物 · 田园晨野 ========== */
+/* 配色走 app.wxss 的 CSS 变量 */
+
+.page {
+  min-height: 100vh;
+  background: var(--paper);
+  padding-bottom: 160rpx;
+}
+
+/* 顶部说明区 */
+.header-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 48rpx 48rpx 36rpx;
+}
+
+.header-icon-circle {
+  width: 112rpx;
+  height: 112rpx;
+  border-radius: 36rpx;
+  background: var(--g-tint);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20rpx;
+}
+
+.header-ic {
+  width: 56rpx;
+  height: 56rpx;
+}
+
+.header-title {
+  font-size: 36rpx;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 12rpx;
+  letter-spacing: -0.5rpx;
+}
+
+.header-desc {
+  font-size: 26rpx;
+  color: var(--ink-3);
+  text-align: center;
+  line-height: 1.6;
+  max-width: 560rpx;
+}
+
+/* 已选数量提示条 */
+.selected-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 40rpx 16rpx;
+}
+
+.selected-text {
+  font-size: 26rpx;
+  color: var(--g600);
+  font-weight: 600;
+}
+
+.clear-btn {
+  font-size: 26rpx;
+  color: var(--clay);
+  font-weight: 500;
+  padding: 8rpx 4rpx;
+}
+
+/* 作物列表 */
+.crop-list {
+  padding: 0 32rpx;
+}
+
+.crop-item {
+  background: var(--card);
+  border-radius: 20rpx;
+  padding: 24rpx;
+  margin-bottom: 16rpx;
+  transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+  border: 2rpx solid var(--card-bd);
+}
+
+.crop-item:active {
+  transform: scale(0.98);
+}
+
+/* 选中态：品牌绿描边 + 浅绿底，勾选语义与描边呼应 */
+.crop-item.selected {
+  border-color: var(--g600);
+  background: var(--g-tint);
+}
+
+.crop-main {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.crop-left {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  min-width: 0;
+}
+
+.crop-icon-wrap {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 22rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 20rpx;
+  flex-shrink: 0;
+}
+
+.crop-icon {
+  font-size: 40rpx;
+}
+
+/* 作物图标背景色（从 iOS 系统色归一到田园晨野色板；水产保留青蓝语义） */
+.bg-rice { background: rgba(201, 162, 39, 0.14); }
+.bg-corn { background: rgba(160, 126, 20, 0.16); }
+.bg-veggie { background: rgba(47, 107, 66, 0.12); }
+.bg-fruit { background: rgba(176, 69, 43, 0.12); }
+.bg-cash { background: rgba(160, 126, 20, 0.12); }
+.bg-tea { background: rgba(30, 70, 52, 0.10); }
+.bg-flower { background: rgba(201, 162, 39, 0.12); }
+.bg-fish { background: rgba(62, 110, 143, 0.12); }
+.bg-default { background: rgba(107, 111, 99, 0.12); }
+
+.crop-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.crop-name {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 6rpx;
+}
+
+.crop-stage {
+  font-size: 24rpx;
+  color: var(--ink-3);
+}
+
+/* 复选框 */
+.checkbox {
+  width: 44rpx;
+  height: 44rpx;
+  border-radius: 50%;
+  border: 3rpx solid #C9C4B2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.crop-item.selected .checkbox {
+  border-color: var(--g600);
+}
+
+.checkbox.checked {
+  background: var(--g600);
+  border-color: var(--g600);
+}
+
+.check-icon {
+  font-size: 24rpx;
+  color: #fff;
+  font-weight: 700;
+}
+
+/* 播种日期设置区域 */
+.planting-date-section {
+  margin-top: 20rpx;
+  padding-top: 20rpx;
+  border-top: 1rpx solid var(--hairline);
+}
+
+.planting-date-label {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  font-size: 24rpx;
+  color: var(--ink-3);
+  font-weight: 500;
+  margin-bottom: 12rpx;
+}
+
+.planting-date-icon {
+  font-size: 24rpx;
+}
+
+.date-picker {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--paper);
+  border-radius: 12rpx;
+  padding: 16rpx 20rpx;
+  font-size: 28rpx;
+  color: var(--ink);
+  transition: background 0.15s ease;
+}
+
+.date-picker.date-set {
+  background: rgba(47, 107, 66, 0.10);
+  color: var(--g600);
+  font-weight: 500;
+}
+
+.date-placeholder {
+  color: #C9C4B2;
+}
+
+.date-arrow {
+  font-size: 32rpx;
+  color: #C9C4B2;
+  font-weight: 300;
+}
+
+.planting-date-hint {
+  display: block;
+  font-size: 22rpx;
+  color: var(--g600);
+  margin-top: 8rpx;
+  font-weight: 500;
+}
+
+/* 个人种植面积输入 */
+.area-row {
+  margin-top: 20rpx;
+}
+
+.area-input {
+  background: var(--paper);
+  border-radius: 12rpx;
+  padding: 16rpx 20rpx;
+  font-size: 28rpx;
+  color: var(--ink);
+}
+
+.area-placeholder {
+  color: #C9C4B2;
+}
+
+/* 空状态 */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 120rpx 0;
+}
+
+.empty-icon {
+  font-size: 72rpx;
+  margin-bottom: 20rpx;
+  opacity: 0.5;
+}
+
+.empty-text {
+  font-size: 28rpx;
+  color: var(--ink-3);
+}
+
+/* 底部保存按钮 */
+.bottom-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--card);
+  padding: 20rpx 32rpx;
+  padding-bottom: calc(20rpx + env(safe-area-inset-bottom));
+  box-shadow: 0 -2rpx 12rpx rgba(0, 0, 0, 0.06);
+  z-index: 100;
+}
+
+.bottom-bar .save-btn {
+  width: 100%;
+  height: 88rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  background: linear-gradient(160deg, #2F6B42, #3D7A50);
+  color: #fff;
+  font-size: 32rpx;
+  font-weight: 600;
+  border-radius: 20rpx;
+  border: none;
+  letter-spacing: 2rpx;
+  box-shadow: 0 4rpx 14rpx rgba(47, 107, 66, 0.28);
+  transition: opacity 0.15s ease;
+}
+
+.bottom-bar .save-btn:active {
+  opacity: 0.85;
+}
+
+.save-btn::after {
+  border: none;
+}
+
+.safe-bottom {
+  height: 40rpx;
+}
